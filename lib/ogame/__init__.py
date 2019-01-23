@@ -7,8 +7,8 @@ import arrow
 import requests
 import random
 
-from ogame import constants
-from ogame.errors import BAD_UNIVERSE_NAME, BAD_DEFENSE_ID, NOT_LOGGED, BAD_CREDENTIALS, CANT_PROCESS, BAD_BUILDING_ID, \
+from . import constants
+from .errors import BAD_UNIVERSE_NAME, BAD_DEFENSE_ID, NOT_LOGGED, BAD_CREDENTIALS, CANT_PROCESS, BAD_BUILDING_ID, \
     BAD_SHIP_ID, BAD_RESEARCH_ID
 from bs4 import BeautifulSoup
 from dateutil import tz
@@ -110,6 +110,8 @@ def get_code(name):
 
 @for_all_methods(sandbox_decorator)
 class OGame(object):
+    TIME_SLEEP_MAX = 2
+
     def __init__(self, universe, username, password, domain='fr.ogame.gameforge.com', auto_bootstrap=True,
                  sandbox=False, sandbox_obj=None):
         self.session = requests.session()
@@ -131,11 +133,11 @@ class OGame(object):
     def login(self):
         """Get the ogame session token."""
         payload = {'kid': '',
-                   'language': 'en',
+                   'language': 'fr',
                    'autologin': 'false',
                    'credentials[email]': self.username,
                    'credentials[password]': self.password}
-        time.sleep(random.uniform(1, 60))
+        time.sleep(random.uniform(1, self.TIME_SLEEP_MAX))
         res = self.session.post('https://lobby-api.ogame.gameforge.com/users', data=payload)
 
         php_session_id = None
@@ -163,7 +165,7 @@ class OGame(object):
                 selected_server_id = server_account['id']
                 break
 
-        time.sleep(random.uniform(1, 60))
+        time.sleep(random.uniform(1, self.TIME_SLEEP_MAX))
         res = self.session.get(
             'https://lobby-api.ogame.gameforge.com/users/me/loginLink?id={}&server[language]={}&server[number]={}'
             .format(selected_server_id, lang, str(server_num)), cookies=cookie).json()
