@@ -1,7 +1,7 @@
 import logging
 import time
 
-from ogame.constants import Buildings
+from lib.ogame.constants import Buildings
 
 from bot.modes.mode import Mode
 
