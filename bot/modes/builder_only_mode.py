@@ -21,6 +21,7 @@ class BuilderOnlyMode(Mode):
                 logging.info(f"{self.__class__.__name__}:: Checking planet {planet_id}...")
 
                 for building in Buildings:
-                    self.session.build(planet_id, building)
+                    print(building)
+                    # self.session.build(planet_id, building)
 
             time.sleep(self.SLEEPING_TIME)

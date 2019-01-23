@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 
 from bot.bot import Bot
@@ -18,6 +19,8 @@ def main(args=None):
 
     args = parser.parse_args(args)
 
+    logging.getLogger().setLevel(logging.INFO)
+    logging.info("Bot is starting...")
     bot = Bot(args.servername, args.username, args.password)
     bot.connect()
     bot.active_mode(args.mode)
