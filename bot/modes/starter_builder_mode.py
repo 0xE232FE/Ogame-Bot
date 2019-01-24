@@ -18,8 +18,8 @@ class StarterBuilderMode(Mode):
         while not self.should_stop:
             logging.info(f"{self.__class__.__name__}:: Checking all planets...")
 
-            for planet in self.bot.planets():
-                logging.info(f"{self.__class__.__name__}:: Checking planet {planet_id}...")
+            for planet in self.bot.planets:
+                logging.info(f"{self.__class__.__name__}:: Checking planet {planet.planet_id}...")
 
                 dict_to_build = [Buildings.MetalStorage, Buildings.MetalMine, Buildings.CrystalStorage,
                                  Buildings.CrystalMine, Buildings.DeuteriumTank, Buildings.DeuteriumSynthesizer,
@@ -28,6 +28,7 @@ class StarterBuilderMode(Mode):
                 planet_buildings_level = {**planet.get_resources_buildings(), **planet.get_facilities()}
 
                 for building in dict_to_build:
+                    logging.info(f"{self.__class__.__name__}:: Check building {building}...")
                     planet.builder.can_build(building,
                                              lvl=planet_buildings_level[building] + 1,
                                              planet_resources=None,

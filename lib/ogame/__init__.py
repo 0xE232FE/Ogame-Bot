@@ -13,8 +13,6 @@ from .errors import BAD_UNIVERSE_NAME, BAD_DEFENSE_ID, NOT_LOGGED, BAD_CREDENTIA
 from bs4 import BeautifulSoup
 from dateutil import tz
 
-from lib.ogame.constants import Calculate
-
 
 def parse_int(text):
     return int(text.replace('.', '').replace(',', '').strip())
@@ -181,6 +179,9 @@ class OGame(object):
         else:
             raise BAD_CREDENTIALS
 
+    def get(self, *args):
+        return self.session.get(*args)
+
     def logout(self):
         self.session.get(self.get_url('logout'))
 
@@ -200,6 +201,19 @@ class OGame(object):
         if not self.is_logged(html):
             raise NOT_LOGGED
         return html
+
+    def get_universe_speed(self, res=None):
+        if not res:
+            res = self.session.get(self.get_url('techtree', {'tab': 2, 'techID': 1})).content
+        soup = BeautifulSoup(res, 'html.parser')
+        if soup.find('head'):
+            raise NOT_LOGGED
+        spans = soup.findAll('span', {'class': 'undermark'})
+        level = parse_int(spans[0].text)
+        val = parse_int(spans[1].text)
+        metal_production = metal_mine_production(level, 1)
+        universe_speed = val / metal_production
+        return universe_speed
 
     def fetch_eventbox(self):
         res = self.session.get(self.get_url('fetchEventbox')).content.decode('utf8')

@@ -51,6 +51,7 @@ class Bot:
             os._exit(1)
         except AttributeError as e:
             logging.error(f"{self.__class__.__name__}:: Some additional credentials are required ({e}).")
+            raise e
             os._exit(1)
 
     def active_mode(self, mode_name):

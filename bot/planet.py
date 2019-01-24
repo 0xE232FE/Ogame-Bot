@@ -14,8 +14,8 @@ class Planet:
         self.planet_id = planet_id
         self.builder = Builder(self.bot, self)
 
-    def fetch_resources(self, planet_id):
-        url = self.bot.get_url('fetchResources', {'cp': planet_id})
+    def fetch_resources(self):
+        url = self.bot.get_url('fetchResources', {'cp': self.planet_id})
         res = self.bot.session.get(url).content.decode('utf8')
         try:
             obj = json.loads(res)
@@ -23,8 +23,8 @@ class Planet:
             raise NOT_LOGGED
         return obj
 
-    def get_resource_settings(self, planet_id):
-        html = self.bot.session.get(self.bot.get_url('resourceSettings', {'cp': planet_id})).content
+    def get_resource_settings(self):
+        html = self.bot.session.get(self.bot.get_url('resourceSettings', {'cp': self.planet_id})).content
         if not self.bot.is_logged(html):
             raise NOT_LOGGED
         soup = BeautifulSoup(html, 'html.parser')
@@ -37,17 +37,17 @@ class Planet:
                Ships.SolarSatellite: options[5]['value']}
         return res
 
-    def get_resources(self, planet_id):
+    def get_resources(self):
         """Returns the planet resources stats."""
-        resources = self.fetch_resources(planet_id)
+        resources = self.fetch_resources()
         return {Resources.Metal: resources['metal']['resources']['actual'],
                 Resources.Crystal: resources['crystal']['resources']['actual'],
                 Resources.Deuterium: resources['deuterium']['resources']['actual'],
                 Resources.Energy: resources['energy']['resources']['actual'],
                 Resources.DarkMatter: resources['darkmatter']['resources']['actual']}
 
-    def get_resources_buildings(self, planet_id):
-        res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content
+    def get_resources_buildings(self):
+        res = self.bot.session.get(self.bot.get_url('resources', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         return {Buildings.MetalMine: get_nbr(soup, 'supply1'),
@@ -60,8 +60,8 @@ class Planet:
                 Buildings.CrystalStorage: get_nbr(soup, 'supply23'),
                 Buildings.DeuteriumTank: get_nbr(soup, 'supply24')}
 
-    def get_defense(self, planet_id):
-        res = self.bot.session.get(self.bot.get_url('defense', {'cp': planet_id})).content
+    def get_defense(self):
+        res = self.bot.session.get(self.bot.get_url('defense', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         return {Defenses.RocketLauncher: get_nbr(soup, 'defense401'),
@@ -75,8 +75,8 @@ class Planet:
                 Defenses.AntiBallisticMissiles: get_nbr(soup, 'defense502'),
                 Defenses.InterplanetaryMissiles: get_nbr(soup, 'defense503')}
 
-    def get_ships(self, planet_id):
-        res = self.bot.session.get(self.bot.get_url('shipyard', {'cp': planet_id})).content
+    def get_ships(self):
+        res = self.bot.session.get(self.bot.get_url('shipyard', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         return {Ships.LightFighter: get_nbr(soup, 'military204'),
@@ -94,8 +94,8 @@ class Planet:
                 Ships.EspionageProbe: get_nbr(soup, 'civil210'),
                 Ships.SolarSatellite: get_nbr(soup, 'civil212')}
 
-    def get_facilities(self, planet_id):
-        res = self.bot.session.get(self.bot.get_url('station', {'cp': planet_id})).content
+    def get_facilities(self):
+        res = self.bot.session.get(self.bot.get_url('station', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         return {Facilities.RoboticsFactory: get_nbr(soup, 'station14'),
@@ -128,8 +128,8 @@ class Planet:
                 Research.ShieldingTechnology: get_nbr(soup, 'research110'),
                 Research.ArmourTechnology: get_nbr(soup, 'research111')}
 
-    def constructions_being_built(self, planet_id):
-        res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).text
+    def constructions_being_built(self):
+        res = self.bot.session.get(self.bot.get_url('overview', {'cp': self.planet_id})).text
         self.bot.is_logged(res)
         building_countdown = 0
         building_id = 0
