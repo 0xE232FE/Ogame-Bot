@@ -1,6 +1,7 @@
 import logging
 import os
 
+from bot.planet import Planet
 from bot.user import User
 from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 
@@ -23,6 +24,8 @@ class Bot:
 
     def initialize(self):
         self.user = User(self)
+        for planet_id in self.user.get_planet_ids():
+            self.planets.append(Planet(self, planet_id))
 
     def is_logged(self, html=None):
         if not self.session.is_logged(html=html):

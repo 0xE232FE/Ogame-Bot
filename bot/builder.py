@@ -82,12 +82,14 @@ class Builder:
                                                 Prices[building]['cost'][Resources.Deuterium][1] ** (lvl - 1)))
         }
 
-    def can_build(self, building, lvl=1, build_if_can=True) -> bool:
+    def can_build(self, building, lvl=1, planet_resources=None, build_if_can=True) -> bool:
         if building not in Ships and building not in Defenses and lvl <= 1:
             lvl = 2  # fix incorrect level
 
         build_requirements = self.building_cost(building, lvl)
-        planet_resources = self.planet.get_resources()
+
+        if not planet_resources:
+            planet_resources = self.planet.get_resources()
 
         if planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \

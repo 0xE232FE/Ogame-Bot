@@ -3,6 +3,7 @@ import re
 
 from bs4 import BeautifulSoup
 
+from bot.builder import Builder
 from lib.ogame import get_nbr, NOT_LOGGED
 from lib.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
 
@@ -11,6 +12,7 @@ class Planet:
     def __init__(self, bot, planet_id):
         self.bot = bot
         self.planet_id = planet_id
+        self.builder = Builder(self.bot, self)
 
     def fetch_resources(self, planet_id):
         url = self.bot.get_url('fetchResources', {'cp': planet_id})
@@ -38,16 +40,11 @@ class Planet:
     def get_resources(self, planet_id):
         """Returns the planet resources stats."""
         resources = self.fetch_resources(planet_id)
-        metal = resources['metal']['resources']['actual']
-        crystal = resources['crystal']['resources']['actual']
-        deuterium = resources['deuterium']['resources']['actual']
-        energy = resources['energy']['resources']['actual']
-        darkmatter = resources['darkmatter']['resources']['actual']
-        return {Resources.Metal: metal,
-                Resources.Crystal: crystal,
-                Resources.Deuterium: deuterium,
-                Resources.Energy: energy,
-                Resources.DarkMatter: darkmatter}
+        return {Resources.Metal: resources['metal']['resources']['actual'],
+                Resources.Crystal: resources['crystal']['resources']['actual'],
+                Resources.Deuterium: resources['deuterium']['resources']['actual'],
+                Resources.Energy: resources['energy']['resources']['actual'],
+                Resources.DarkMatter: resources['darkmatter']['resources']['actual']}
 
     def get_resources_buildings(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content
