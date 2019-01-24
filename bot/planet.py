@@ -43,12 +43,11 @@ class Planet:
         deuterium = resources['deuterium']['resources']['actual']
         energy = resources['energy']['resources']['actual']
         darkmatter = resources['darkmatter']['resources']['actual']
-        result = {Resources.Metal: metal,
-                  Resources.Crystal: crystal,
-                  Resources.Deuterium: deuterium,
-                  Resources.Energy: energy,
-                  Resources.DarkMatter: darkmatter}
-        return result
+        return {Resources.Metal: metal,
+                Resources.Crystal: crystal,
+                Resources.Deuterium: deuterium,
+                Resources.Energy: energy,
+                Resources.DarkMatter: darkmatter}
 
     def get_resources_buildings(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content

@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 
 from lib.ogame import NOT_LOGGED, parse_int
+from lib.ogame.constants import Me
 
 
 class User:
@@ -13,18 +14,17 @@ class User:
         if not html:
             html = self.bot.session.get(self.bot.get_url('overview')).content
         self.bot.is_logged(html)
-        res = {'player_id': int(re.search(r'playerId="(\w+)"', html).group(1)),
-               'player_name': re.search(r'playerName="([^"]+)"', html).group(1)}
-        tmp = re.search(r'textContent\[7\]="([^"]+)"', html).group(1)
-        soup = BeautifulSoup(tmp, 'html.parser')
-        tmp = soup.text
-        infos = re.search(r'([\d\\.]+) \(Place ([\d\.]+) of ([\d\.]+)\)', tmp)
-        res['points'] = parse_int(infos.group(1))
-        res['rank'] = parse_int(infos.group(2))
-        res['total'] = parse_int(infos.group(3))
-        res['honour_points'] = parse_int(re.search(r'textContent\[9\]="([^"]+)"', html).group(1))
-        res['planet_ids'] = self.get_planet_ids(html)
-        return res
+        soup = BeautifulSoup(re.search(r'textContent\[7\]="([^"]+)"', html).group(1), 'html.parser')
+        infos = re.search(r'([\d\\.]+) \(Place ([\d\.]+) of ([\d\.]+)\)', soup.text)
+        return {
+            Me.id: int(re.search(r'playerId="(\w+)"', html).group(1)),
+            Me.Name: re.search(r'playerName="([^"]+)"', html).group(1),
+            Me.HonourPoints: parse_int(re.search(r'textContent\[9\]="([^"]+)"', html).group(1)),
+            Me.PlanetsId: self.get_planet_ids(html),
+            Me.Points: parse_int(infos.group(1)),
+            Me.Rank: parse_int(infos.group(2)),
+            Me.Total: parse_int(infos.group(3))
+        }
 
     def get_planet_ids(self, res=None):
         """Get the ids of your planets."""
@@ -33,8 +33,7 @@ class User:
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
-        ids = [planet['id'].replace('planet-', '') for planet in planets]
-        return ids
+        return [planet['id'].replace('planet-', '') for planet in planets]
 
     def get_moon_ids(self, res=None):
         """Get the ids of your moons."""
@@ -43,8 +42,7 @@ class User:
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         moons = soup.findAll('a', {'class': 'moonlink'})
-        ids = [moon['href'].split('&cp=')[1] for moon in moons]
-        return ids
+        return [moon['href'].split('&cp=')[1] for moon in moons]
 
     def get_planet_by_name(self, planet_name, res=None):
         """Returns the first planet id with the specified name."""
