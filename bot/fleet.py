@@ -2,7 +2,7 @@ import re
 
 from bs4 import BeautifulSoup
 
-from lib.ogame import parse_int, NOT_LOGGED, constants, get_code
+from lib.ogame import parse_int, constants, get_code
 
 
 class Fleet:
@@ -23,8 +23,7 @@ class Fleet:
         url = self.bot.get_url('fleet1', {'cp': planet_id})
 
         res = self.bot.session.get(url).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         payload = {}
         payload.update(get_hidden_fields(res))
         for name, value in ships:
@@ -74,13 +73,11 @@ class Fleet:
 
     def cancel_fleet(self, fleet_id):
         res = self.bot.session.get(self.bot.get_url('movement') + '&return={}'.format(fleet_id)).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
 
     def get_fleets(self):
         res = self.bot.session.get(self.bot.get_url('movement')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         fleets = []
         soup = BeautifulSoup(res, 'html.parser')
         divs = soup.findAll('div', {'class': 'fleetDetails'})
@@ -161,8 +158,7 @@ class Fleet:
     def get_fleet_ids(self):
         """Return the reversable fleet ids."""
         res = self.bot.session.get(self.bot.get_url('movement')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         spans = soup.findAll('span', {'class': 'reversal'})
         fleet_ids = [span.get('ref') for span in spans]

@@ -2,7 +2,7 @@ import logging
 import os
 
 from bot.user import User
-from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME
+from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 
 from bot import modes
 from bot.modes.mode import Mode
@@ -25,7 +25,9 @@ class Bot:
         self.user = User(self)
 
     def is_logged(self, html=None):
-        return self.session.is_logged(html=html)
+        if not self.session.is_logged(html=html):
+            raise NOT_LOGGED
+        return True
 
     def get_url(self, page, params=None):
         return self.session.get_url(page=page, params=params)

@@ -5,6 +5,8 @@ class Resources(Enum):
     Metal = "metal"
     Crystal = "crystal"
     Deuterium = "deuterium"
+    Energy = "energy"
+    DarkMatter = "dark_matter"
 
 
 class Buildings(Enum):

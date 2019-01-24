@@ -12,8 +12,7 @@ class User:
     def get_user_infos(self, html=None):
         if not html:
             html = self.bot.session.get(self.bot.get_url('overview')).content
-        if not self.bot.is_logged(html):
-            raise NOT_LOGGED
+        self.bot.is_logged(html)
         res = {'player_id': int(re.search(r'playerId="(\w+)"', html).group(1)),
                'player_name': re.search(r'playerName="([^"]+)"', html).group(1)}
         tmp = re.search(r'textContent\[7\]="([^"]+)"', html).group(1)
@@ -31,8 +30,7 @@ class User:
         """Get the ids of your planets."""
         if not res:
             res = self.bot.session.get(self.bot.get_url('overview')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
         ids = [planet['id'].replace('planet-', '') for planet in planets]
@@ -42,8 +40,7 @@ class User:
         """Get the ids of your moons."""
         if not res:
             res = self.bot.session.get(self.bot.get_url('overview')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         moons = soup.findAll('a', {'class': 'moonlink'})
         ids = [moon['href'].split('&cp=')[1] for moon in moons]
@@ -53,8 +50,7 @@ class User:
         """Returns the first planet id with the specified name."""
         if not res:
             res = self.bot.session.get(self.bot.get_url('overview')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
         for planet in planets:

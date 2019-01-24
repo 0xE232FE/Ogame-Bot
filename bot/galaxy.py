@@ -13,8 +13,7 @@ class Galaxy:
     def get_planet_infos(self, planet_id, res=None):
         if not res:
             res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         link = soup.find('div', {'id': 'planet-{}'.format(planet_id)})
         if link is not None:  # is a planet pid

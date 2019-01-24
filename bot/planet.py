@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 
 from lib.ogame import get_nbr, NOT_LOGGED
+from lib.ogame.constants import Buildings, Ships, Resources
 
 
 class Planet:
@@ -26,12 +27,12 @@ class Planet:
             raise NOT_LOGGED
         soup = BeautifulSoup(html, 'html.parser')
         options = soup.find_all('option', {'selected': True})
-        res = {'metal_mine': options[0]['value'],
-               'crystal_mine': options[1]['value'],
-               'deuterium_synthesizer': options[2]['value'],
-               'solar_plant': options[3]['value'],
-               'fusion_reactor': options[4]['value'],
-               'solar_satellite': options[5]['value']}
+        res = {Buildings.MetalMine: options[0]['value'],
+               Buildings.CrystalMine: options[1]['value'],
+               Buildings.DeuteriumSynthesizer: options[2]['value'],
+               Buildings.SolarPlant: options[3]['value'],
+               Buildings.FusionReactor: options[4]['value'],
+               Ships.SolarSatellite: options[5]['value']}
         return res
 
     def get_resources(self, planet_id):
@@ -42,26 +43,31 @@ class Planet:
         deuterium = resources['deuterium']['resources']['actual']
         energy = resources['energy']['resources']['actual']
         darkmatter = resources['darkmatter']['resources']['actual']
-        result = {'metal': metal, 'crystal': crystal, 'deuterium': deuterium,
-                  'energy': energy, 'darkmatter': darkmatter}
+        result = {Resources.Metal: metal,
+                  Resources.Crystal: crystal,
+                  Resources.Deuterium: deuterium,
+                  Resources.Energy: energy,
+                  Resources.DarkMatter: darkmatter}
         return result
 
     def get_resources_buildings(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {'metal_mine': get_nbr(soup, 'supply1'), 'crystal_mine': get_nbr(soup, 'supply2'),
-               'deuterium_synthesizer': get_nbr(soup, 'supply3'), 'solar_plant': get_nbr(soup, 'supply4'),
-               'fusion_reactor': get_nbr(soup, 'supply12'), 'solar_satellite': get_nbr(soup, 'supply212'),
-               'metal_storage': get_nbr(soup, 'supply22'), 'crystal_storage': get_nbr(soup, 'supply23'),
-               'deuterium_tank': get_nbr(soup, 'supply24')}
+        res = {Buildings.MetalMine: get_nbr(soup, 'supply1'),
+               Buildings.CrystalMine: get_nbr(soup, 'supply2'),
+               Buildings.DeuteriumSynthesizer: get_nbr(soup, 'supply3'),
+               Buildings.SolarPlant: get_nbr(soup, 'supply4'),
+               Buildings.FusionReactor: get_nbr(soup, 'supply12'),
+               Ships.SolarSatellite: get_nbr(soup, 'supply212'),
+               Buildings.MetalStorage: get_nbr(soup, 'supply22'),
+               Buildings.CrystalStorage: get_nbr(soup, 'supply23'),
+               Buildings.DeuteriumTank: get_nbr(soup, 'supply24')}
         return res
 
     def get_defense(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('defense', {'cp': planet_id})).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         res = {'rocket_launcher': get_nbr(soup, 'defense401'),
                'light_laser': get_nbr(soup, 'defense402'),
@@ -77,8 +83,7 @@ class Planet:
 
     def get_ships(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('shipyard', {'cp': planet_id})).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         res = {'light_fighter': get_nbr(soup, 'military204'),
                'heavy_fighter': get_nbr(soup, 'military205'),
@@ -98,8 +103,7 @@ class Planet:
 
     def get_facilities(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('station', {'cp': planet_id})).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         res = {'robotics_factory': get_nbr(soup, 'station14'),
                'shipyard': get_nbr(soup, 'station21'),
@@ -113,8 +117,7 @@ class Planet:
 
     def get_research(self):
         res = self.bot.session.get(self.bot.get_url('research')).content
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
+        self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         res = {'energy_technology': get_nbr(soup, 'research113'),
                'laser_technology': get_nbr(soup, 'research120'),
@@ -136,18 +139,17 @@ class Planet:
 
     def constructions_being_built(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).text
-        if not self.bot.is_logged(res):
-            raise NOT_LOGGED
-        buildingCountdown = 0
-        buildingID = 0
-        researchCountdown = 0
-        researchID = 0
-        buildingCountdownMatch = re.search('getElementByIdWithCache\("Countdown"\),(\d+),', res)
-        if buildingCountdownMatch:
-            buildingCountdown = buildingCountdownMatch.group(1)
-            buildingID = re.search('onclick="cancelProduction\((\d+),', res).group(1)
-        researchCountdownMatch = re.search('getElementByIdWithCache\("researchCountdown"\),(\d+),', res)
-        if researchCountdownMatch:
-            researchCountdown = researchCountdownMatch.group(1)
-            researchID = re.search('onclick="cancelResearch\((\d+),', res).group(1)
-        return buildingID, buildingCountdown, researchID, researchCountdown
+        self.bot.is_logged(res)
+        building_countdown = 0
+        building_id = 0
+        research_countdown = 0
+        research_id = 0
+        building_countdown_match = re.search('getElementByIdWithCache\("Countdown"\),(\d+),', res)
+        if building_countdown_match:
+            building_countdown = building_countdown_match.group(1)
+            building_id = re.search('onclick="cancelProduction\((\d+),', res).group(1)
+        research_countdown_match = re.search('getElementByIdWithCache\("research_countdown"\),(\d+),', res)
+        if research_countdown_match:
+            research_countdown = research_countdown_match.group(1)
+            research_id = re.search('onclick="cancelResearch\((\d+),', res).group(1)
+        return building_id, building_countdown, research_id, research_countdown
