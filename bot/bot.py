@@ -1,6 +1,7 @@
 import logging
 import os
 
+from bot.user import User
 from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME
 
 from bot import modes
@@ -16,6 +17,21 @@ class Bot:
 
         self.session = None
         self.modes = []
+
+        self.user = None
+        self.planets = []
+
+    def initialize(self):
+        self.user = User()
+
+    def is_logged(self, html=None):
+        return self.session.is_logged(html=html)
+
+    def get_url(self, page, params=None):
+        return self.session.get_url(page=page, params=params)
+
+    def fetch_eventbox(self):
+        return self.session.fetch_eventbox()
 
     def connect(self):
         try:

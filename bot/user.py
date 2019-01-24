@@ -6,13 +6,13 @@ from lib.ogame import NOT_LOGGED
 
 
 class User:
-    def __init__(self):
-        pass
+    def __init__(self, bot):
+        self.bot = bot
 
     def get_user_infos(self, html=None):
         if not html:
-            html = self.session.get(self.get_url('overview')).content
-        if not self.is_logged(html):
+            html = self.bot.session.get(self.bot.get_url('overview')).content
+        if not self.bot.is_logged(html):
             raise NOT_LOGGED
         res = {'player_id': int(re.search(r'playerId="(\w+)"', html).group(1)),
                'player_name': re.search(r'playerName="([^"]+)"', html).group(1)}
@@ -30,8 +30,8 @@ class User:
     def get_planet_ids(self, res=None):
         """Get the ids of your planets."""
         if not res:
-            res = self.session.get(self.get_url('overview')).content
-        if not self.is_logged(res):
+            res = self.bot.session.get(self.bot.get_url('overview')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
@@ -41,8 +41,8 @@ class User:
     def get_moon_ids(self, res=None):
         """Get the ids of your moons."""
         if not res:
-            res = self.session.get(self.get_url('overview')).content
-        if not self.is_logged(res):
+            res = self.bot.session.get(self.bot.get_url('overview')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         moons = soup.findAll('a', {'class': 'moonlink'})
@@ -52,8 +52,8 @@ class User:
     def get_planet_by_name(self, planet_name, res=None):
         """Returns the first planet id with the specified name."""
         if not res:
-            res = self.session.get(self.get_url('overview')).content
-        if not self.is_logged(res):
+            res = self.bot.session.get(self.bot.get_url('overview')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
@@ -71,17 +71,17 @@ class User:
                    'text': msg,
                    'mode': 1,
                    'ajax': 1}
-        url = self.get_url('ajaxChat')
-        self.session.post(url, data=payload, headers=headers)
+        url = self.bot.get_url('ajaxChat')
+        self.bot.session.post(url, data=payload, headers=headers)
 
     def is_under_attack(self, json_obj=None):
         if not json_obj:
-            json_obj = self.fetch_eventbox()
+            json_obj = self.bot.fetch_eventbox()
         return not json_obj.get('hostile', 0) == 0
 
     def get_attacks(self):
         headers = {'X-Requested-With': 'XMLHttpRequest'}
-        res = self.session.get(self.get_url('eventList'), params={'ajax': 1},
+        res = self.bot.session.get(self.bot.get_url('eventList'), params={'ajax': 1},
                                headers=headers).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):

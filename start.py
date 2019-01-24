@@ -23,6 +23,7 @@ def main(args=None):
     logging.info("Bot is starting...")
     bot = Bot(args.servername, args.username, args.password)
     bot.connect()
+    bot.initialize()
     bot.active_mode(args.mode)
 
 
