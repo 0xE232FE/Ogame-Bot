@@ -230,37 +230,6 @@ class OGame(object):
                   'energy': energy, 'darkmatter': darkmatter}
         return result
 
-    def get_universe_speed(self, res=None):
-        if not res:
-            res = self.session.get(self.get_url('techtree', {'tab': 2, 'techID': 1})).content
-        soup = BeautifulSoup(res, 'html.parser')
-        if soup.find('head'):
-            raise NOT_LOGGED
-        spans = soup.findAll('span', {'class': 'undermark'})
-        level = parse_int(spans[0].text)
-        val = parse_int(spans[1].text)
-        metal_production = metal_mine_production(level, 1)
-        universe_speed = val / metal_production
-        return universe_speed
-
-    def get_user_infos(self, html=None):
-        if not html:
-            html = self.session.get(self.get_url('overview')).content
-        if not self.is_logged(html):
-            raise NOT_LOGGED
-        res = {'player_id': int(re.search(r'playerId="(\w+)"', html).group(1)),
-               'player_name': re.search(r'playerName="([^"]+)"', html).group(1)}
-        tmp = re.search(r'textContent\[7\]="([^"]+)"', html).group(1)
-        soup = BeautifulSoup(tmp, 'html.parser')
-        tmp = soup.text
-        infos = re.search(r'([\d\\.]+) \(Place ([\d\.]+) of ([\d\.]+)\)', tmp)
-        res['points'] = parse_int(infos.group(1))
-        res['rank'] = parse_int(infos.group(2))
-        res['total'] = parse_int(infos.group(3))
-        res['honour_points'] = parse_int(re.search(r'textContent\[9\]="([^"]+)"', html).group(1))
-        res['planet_ids'] = self.get_planet_ids(html)
-        return res
-
     def get_resources_buildings(self, planet_id):
         res = self.session.get(self.get_url('resources', {'cp': planet_id})).content
         if not self.is_logged(res):
@@ -278,17 +247,16 @@ class OGame(object):
         if not self.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
-        res = {}
-        res['rocket_launcher'] = get_nbr(soup, 'defense401')
-        res['light_laser'] = get_nbr(soup, 'defense402')
-        res['heavy_laser'] = get_nbr(soup, 'defense403')
-        res['gauss_cannon'] = get_nbr(soup, 'defense404')
-        res['ion_cannon'] = get_nbr(soup, 'defense405')
-        res['plasma_turret'] = get_nbr(soup, 'defense406')
-        res['small_shield_dome'] = get_nbr(soup, 'defense407')
-        res['large_shield_dome'] = get_nbr(soup, 'defense408')
-        res['anti_ballistic_missiles'] = get_nbr(soup, 'defense502')
-        res['interplanetary_missiles'] = get_nbr(soup, 'defense503')
+        res = {'rocket_launcher': get_nbr(soup, 'defense401'),
+               'light_laser': get_nbr(soup, 'defense402'),
+               'heavy_laser': get_nbr(soup, 'defense403'),
+               'gauss_cannon': get_nbr(soup, 'defense404'),
+               'ion_cannon': get_nbr(soup, 'defense405'),
+               'plasma_turret': get_nbr(soup, 'defense406'),
+               'small_shield_dome': get_nbr(soup, 'defense407'),
+               'large_shield_dome': get_nbr(soup, 'defense408'),
+               'anti_ballistic_missiles': get_nbr(soup, 'defense502'),
+               'interplanetary_missiles': get_nbr(soup, 'defense503')}
         return res
 
     def get_ships(self, planet_id):
@@ -296,21 +264,20 @@ class OGame(object):
         if not self.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
-        res = {}
-        res['light_fighter'] = get_nbr(soup, 'military204')
-        res['heavy_fighter'] = get_nbr(soup, 'military205')
-        res['cruiser'] = get_nbr(soup, 'military206')
-        res['battleship'] = get_nbr(soup, 'military207')
-        res['battlecruiser'] = get_nbr(soup, 'military215')
-        res['bomber'] = get_nbr(soup, 'military211')
-        res['destroyer'] = get_nbr(soup, 'military213')
-        res['deathstar'] = get_nbr(soup, 'military214')
-        res['small_cargo'] = get_nbr(soup, 'civil202')
-        res['large_cargo'] = get_nbr(soup, 'civil203')
-        res['colony_ship'] = get_nbr(soup, 'civil208')
-        res['recycler'] = get_nbr(soup, 'civil209')
-        res['espionage_probe'] = get_nbr(soup, 'civil210')
-        res['solar_satellite'] = get_nbr(soup, 'civil212')
+        res = {'light_fighter': get_nbr(soup, 'military204'),
+               'heavy_fighter': get_nbr(soup, 'military205'),
+               'cruiser': get_nbr(soup, 'military206'),
+               'battleship': get_nbr(soup, 'military207'),
+               'battlecruiser': get_nbr(soup, 'military215'),
+               'bomber': get_nbr(soup, 'military211'),
+               'destroyer': get_nbr(soup, 'military213'),
+               'deathstar': get_nbr(soup, 'military214'),
+               'small_cargo': get_nbr(soup, 'civil202'),
+               'large_cargo': get_nbr(soup, 'civil203'),
+               'colony_ship': get_nbr(soup, 'civil208'),
+               'recycler': get_nbr(soup, 'civil209'),
+               'espionage_probe': get_nbr(soup, 'civil210'),
+               'solar_satellite': get_nbr(soup, 'civil212')}
         return res
 
     def get_facilities(self, planet_id):
@@ -318,15 +285,14 @@ class OGame(object):
         if not self.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
-        res = {}
-        res['robotics_factory'] = get_nbr(soup, 'station14')
-        res['shipyard'] = get_nbr(soup, 'station21')
-        res['research_lab'] = get_nbr(soup, 'station31')
-        res['alliance_depot'] = get_nbr(soup, 'station34')
-        res['missile_silo'] = get_nbr(soup, 'station44')
-        res['nanite_factory'] = get_nbr(soup, 'station15')
-        res['terraformer'] = get_nbr(soup, 'station33')
-        res['space_dock'] = get_nbr(soup, 'station36')
+        res = {'robotics_factory': get_nbr(soup, 'station14'),
+               'shipyard': get_nbr(soup, 'station21'),
+               'research_lab': get_nbr(soup, 'station31'),
+               'alliance_depot': get_nbr(soup, 'station34'),
+               'missile_silo': get_nbr(soup, 'station44'),
+               'nanite_factory': get_nbr(soup, 'station15'),
+               'terraformer': get_nbr(soup, 'station33'),
+               'space_dock': get_nbr(soup, 'station36')}
         return res
 
     def get_research(self):
@@ -334,23 +300,22 @@ class OGame(object):
         if not self.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
-        res = {}
-        res['energy_technology'] = get_nbr(soup, 'research113')
-        res['laser_technology'] = get_nbr(soup, 'research120')
-        res['ion_technology'] = get_nbr(soup, 'research121')
-        res['hyperspace_technology'] = get_nbr(soup, 'research114')
-        res['plasma_technology'] = get_nbr(soup, 'research122')
-        res['combustion_drive'] = get_nbr(soup, 'research115')
-        res['impulse_drive'] = get_nbr(soup, 'research117')
-        res['hyperspace_drive'] = get_nbr(soup, 'research118')
-        res['espionage_technology'] = get_nbr(soup, 'research106')
-        res['computer_technology'] = get_nbr(soup, 'research108')
-        res['astrophysics'] = get_nbr(soup, 'research124')
-        res['intergalactic_research_network'] = get_nbr(soup, 'research123')
-        res['graviton_technology'] = get_nbr(soup, 'research199')
-        res['weapons_technology'] = get_nbr(soup, 'research109')
-        res['shielding_technology'] = get_nbr(soup, 'research110')
-        res['armour_technology'] = get_nbr(soup, 'research111')
+        res = {'energy_technology': get_nbr(soup, 'research113'),
+               'laser_technology': get_nbr(soup, 'research120'),
+               'ion_technology': get_nbr(soup, 'research121'),
+               'hyperspace_technology': get_nbr(soup, 'research114'),
+               'plasma_technology': get_nbr(soup, 'research122'),
+               'combustion_drive': get_nbr(soup, 'research115'),
+               'impulse_drive': get_nbr(soup, 'research117'),
+               'hyperspace_drive': get_nbr(soup, 'research118'),
+               'espionage_technology': get_nbr(soup, 'research106'),
+               'computer_technology': get_nbr(soup, 'research108'),
+               'astrophysics': get_nbr(soup, 'research124'),
+               'intergalactic_research_network': get_nbr(soup, 'research123'),
+               'graviton_technology': get_nbr(soup, 'research199'),
+               'weapons_technology': get_nbr(soup, 'research109'),
+               'shielding_technology': get_nbr(soup, 'research110'),
+               'armour_technology': get_nbr(soup, 'research111')}
         return res
 
     def constructions_being_built(self, planet_id):
@@ -487,6 +452,9 @@ class OGame(object):
                                             Calculate[category][building]['cost']['Deuterium'][1] ** (lvl - 1)))
                 }
         return cost
+
+    def can_build(self):
+        pass
 
     def build_technology(self, planet_id, technology_id, cancel=False):
         if technology_id not in constants.Research.values():
