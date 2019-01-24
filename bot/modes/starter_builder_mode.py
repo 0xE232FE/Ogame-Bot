@@ -8,7 +8,7 @@ from bot.modes.mode import Mode
 
 
 class StarterBuilderMode(Mode):
-    SLEEPING_TIME_FACTOR = 1
+    SLEEPING_TIME_FACTOR = 60 / 10  # normal value = 60 --> minutes
 
     def __init__(self, bot, session):
         super().__init__(bot, session)
@@ -23,9 +23,13 @@ class StarterBuilderMode(Mode):
 
                 dict_to_build = [Buildings.MetalStorage, Buildings.MetalMine, Buildings.CrystalStorage,
                                  Buildings.CrystalMine, Buildings.DeuteriumTank, Buildings.DeuteriumSynthesizer,
-                                 Buildings.SolarPlant, Facilities.ResearchLab, Facilities.Shipyard]
+                                 Buildings.SolarPlant, Facilities.ResearchLab, Facilities.Shipyard,
+                                 Research.EnergyTechnology, Research.CombustionDrive, Research.LaserTechnology,
+                                 Research.ComputerTechnology, Research.EspionageTechnology]
 
-                planet_buildings_level = {**planet.get_resources_buildings(), **planet.get_facilities()}
+                planet_buildings_level = {**planet.get_resources_buildings(),
+                                          **planet.get_facilities(),
+                                          **planet.get_research()}
 
                 for _ in range(1, random.randint(2, 20)):
                     building = random.choice(dict_to_build)
@@ -34,6 +38,6 @@ class StarterBuilderMode(Mode):
                                                  planet_resources=None,
                                                  build_if_can=True)):
                         logging.info(f"{self.__class__.__name__}:: Start building {building}...")
-                    time.sleep(random.randint(10, 30))
+                    time.sleep(random.randint(2, 60))
 
-            time.sleep(self.SLEEPING_TIME_FACTOR * random.randint(2, 25))
+            time.sleep(self.SLEEPING_TIME_FACTOR * random.randint(2, 30))
