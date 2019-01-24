@@ -71,6 +71,9 @@ class Builder:
         self.bot.wrapper.session.post(url, data=payload)
         # return True
 
+    def construction_time(self):
+        pass # TODO https://ogame.fandom.com/wiki/Buildings
+
     def building_cost(self, building, lvl):
         """ Building cost lvl + 1 """
         return {

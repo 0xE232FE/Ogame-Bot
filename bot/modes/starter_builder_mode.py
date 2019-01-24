@@ -27,12 +27,13 @@ class StarterBuilderMode(Mode):
 
                 planet_buildings_level = {**planet.get_resources_buildings(), **planet.get_facilities()}
 
-                for building in dict_to_build:
-                    logging.info(f"{self.__class__.__name__}:: Check building {building}...")
-                    planet.builder.can_build(building,
-                                             lvl=planet_buildings_level[building] + 1,
-                                             planet_resources=None,
-                                             build_if_can=True)
+                for _ in range(1, random.randint(2, 20)):
+                    building = random.choice(dict_to_build)
+                    if (planet.builder.can_build(building,
+                                                 lvl=planet_buildings_level[building] + 1,
+                                                 planet_resources=None,
+                                                 build_if_can=True)):
+                        logging.info(f"{self.__class__.__name__}:: Start building {building}...")
                     time.sleep(random.randint(10, 30))
 
             time.sleep(self.SLEEPING_TIME_FACTOR * random.randint(2, 25))

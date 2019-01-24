@@ -119,68 +119,155 @@ class Missions(IntEnum):
     Expedition = 15
 
 
+# from https://board.en.ogame.gameforge.com/index.php/Thread/78613-All-Buildings-Researches-Fleets-and-Defences/
 Prices = {
     Buildings.MetalMine: {
         'cost': {Resources.Metal: [60, 1.5], Resources.Crystal: [15, 1.5], Resources.Deuterium: [0, 0]},
         'production': [30, 1.1],
-        'consummation': [10, 1.1],
-        'prerequisite': {},
+        'consummation': [10, 1.1]
     },
     Buildings.CrystalMine: {
         'cost': {Resources.Metal: [48, 1.6], Resources.Crystal: [24, 1.6], Resources.Deuterium: [0, 0]},
         'production': [20, 1.1],
-        'consummation': [10, 1.1],
-        'prerequisite': {},
+        'consummation': [10, 1.1]
     },
     Buildings.DeuteriumSynthesizer: {
         'cost': {Resources.Metal: [225, 1.5], Resources.Crystal: [75, 1.5], Resources.Deuterium: [0, 0]},
         'production': [10, 1.1],
-        'consummation': [20, 1.1],
-        'prerequisite': {},
+        'consummation': [20, 1.1]
     },
     Buildings.MetalStorage: {
         'cost': {Resources.Metal: [500, 2], Resources.Crystal: [0, 0], Resources.Deuterium: [0, 0]},
-        'capacite': [1.6],
-        'consummation': [0, 0],
-        'prerequisite': {},
+        'stock': [1.6]
     },
     Buildings.CrystalStorage: {
         'cost': {Resources.Metal: [500, 2], Resources.Crystal: [250, 2], Resources.Deuterium: [0, 0]},
-        'capacite': [1.6],
-        'consummation': [0, 0],
-        'prerequisite': {},
+        'stock': [1.6]
     },
     Buildings.DeuteriumTank: {
         'cost': {Resources.Metal: [1000, 2], Resources.Crystal: [1000, 2], Resources.Deuterium: [0, 0]},
-        'capacite': [1.6],
-        'consummation': [0, 0],
-        'prerequisite': {},
+        'stock': [1.6]
+    },
+    Buildings.FusionReactor: {
+        'cost': {Resources.Metal: [900, 1.8], Resources.Crystal: [360, 1.8], Resources.Deuterium: [180, 1.8]}
     },
     Buildings.SolarPlant: {
         'cost': {Resources.Metal: [75, 1.5], Resources.Crystal: [30, 1.5], Resources.Deuterium: [0, 0]},
-        'production': [20, 1.1],
-        'consummation': [0, 0],
-        'prerequisite': {},
+        'production': [20, 1.1]
     },
     Facilities.RoboticsFactory: {
-        'cost': {Resources.Metal: [400, 2], Resources.Crystal: [120, 2], Resources.Deuterium: [200, 2]},
-        'prerequisite': {},
+        'cost': {Resources.Metal: [400, 2], Resources.Crystal: [120, 2], Resources.Deuterium: [200, 2]}
     },
     Facilities.Shipyard: {
-        'cost': {Resources.Metal: [400, 2], Resources.Crystal: [200, 2], Resources.Deuterium: [100, 2]},
-        'production': [0, 0],
-        'consummation': [0, 0],
-        'prerequisite': [[Facilities.RoboticsFactory, 2]],
+        'cost': {Resources.Metal: [400, 2], Resources.Crystal: [200, 2], Resources.Deuterium: [100, 2]}
     },
     Facilities.ResearchLab: {
         'cost': {Resources.Metal: [200, 2], Resources.Crystal: [400, 2], Resources.Deuterium: [200, 2]},
-        'production': [0, 0],
-        'consummation': [0, 0],
-        'prerequisite': [],
+    },
+    Facilities.NaniteFactory: {
+        'cost': {Resources.Metal: [1000000, 2], Resources.Crystal: [500000, 2], Resources.Deuterium: [100000, 2]},
+    },
+    Facilities.Terraformer: {
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [50000, 2], Resources.Deuterium: [100000, 2]},
+    },
+    Facilities.MissileSilo: {
+        'cost': {Resources.Metal: [20000, 2], Resources.Crystal: [20000, 2], Resources.Deuterium: [1000, 2]},
+        'stock': [10, 5]
+    },
+    Facilities.AllianceDepot: {
+        'cost': {Resources.Metal: [20000, 2], Resources.Crystal: [20000, 2], Resources.Deuterium: [1000, 2]},
+    },
+    Research.EspionageTechnology: {
+        'cost': {Resources.Metal: [200, 2], Resources.Crystal: [1000, 2], Resources.Deuterium: [200, 2]},
+    },
+    Research.ComputerTechnology: {
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [400, 2], Resources.Deuterium: [600, 2]},
+    },
+    Research.WeaponsTechnology: {
+        'cost': {Resources.Metal: [800, 2], Resources.Crystal: [200, 2], Resources.Deuterium: [0, 2]},
+    },
+    Research.ShieldingTechnology: {
+        'cost': {Resources.Metal: [200, 2], Resources.Crystal: [600, 2], Resources.Deuterium: [0, 2]},
+    },
+    Research.ArmourTechnology: {
+        'cost': {Resources.Metal: [1000, 2], Resources.Crystal: [0, 2], Resources.Deuterium: [0, 2]},
+    },
+    Research.EnergyTechnology: {
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [800, 2], Resources.Deuterium: [400, 2]},
+    },
+    Research.HyperspaceTechnology: {
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [4000, 2], Resources.Deuterium: [2000, 2]},
+    },
+    Research.CombustionDrive: {
+        'cost': {Resources.Metal: [400, 2], Resources.Crystal: [0, 2], Resources.Deuterium: [600, 2]},
+    },
+    Research.ImpulseDrive: {
+        'cost': {Resources.Metal: [2000, 2], Resources.Crystal: [4000, 2], Resources.Deuterium: [600, 2]},
+    },
+    Research.HyperspaceDrive: {
+        'cost': {Resources.Metal: [10000, 2], Resources.Crystal: [20000, 2], Resources.Deuterium: [6000, 2]},
+    },
+    Research.LaserTechnology: {
+        'cost': {Resources.Metal: [200, 2], Resources.Crystal: [100, 2], Resources.Deuterium: [0, 2]},
+    },
+    Research.IonTechnology: {
+        'cost': {Resources.Metal: [1000, 2], Resources.Crystal: [300, 2], Resources.Deuterium: [100, 2]},
+    },
+    Research.PlasmaTechnology: {
+        'cost': {Resources.Metal: [2000, 2], Resources.Crystal: [4000, 2], Resources.Deuterium: [1000, 2]},
+    },
+    Research.IntergalacticResearchNetwork: {
+        'cost': {Resources.Metal: [240000, 2], Resources.Crystal: [400000, 2], Resources.Deuterium: [160000, 2]},
+    },
+    Research.GravitonTechnology: {
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [0, 2], Resources.Deuterium: [0, 2], Resources.Energy: [300000, 2]},
+    },
+    Research.Astrophysics: {
+        'cost': {Resources.Metal: [4000, 2], Resources.Crystal: [8000, 2], Resources.Deuterium: [4000, 2]},
     },
     Ships.SolarSatellite: {
         'cost': {Resources.Metal: [0, 0], Resources.Crystal: [0, 0], Resources.Deuterium: [0, 0]},
-        'production': [],
-        'consummation': [0, 0]
+        'production': [30],
     },
+    Ships.Bomber: {
+        'cost': {Resources.Metal: [50000, 0], Resources.Crystal: [25000, 0], Resources.Deuterium: [15000, 0]}
+    },
+    Ships.EspionageProbe: {
+        'cost': {Resources.Metal: [0, 0], Resources.Crystal: [1000, 0], Resources.Deuterium: [0, 0]}
+    },
+    Ships.Recycler: {
+        'cost': {Resources.Metal: [10000, 0], Resources.Crystal: [6000, 0], Resources.Deuterium: [2000, 0]}
+    },
+    Ships.ColonyShip: {
+        'cost': {Resources.Metal: [10000, 0], Resources.Crystal: [20000, 0], Resources.Deuterium: [10000, 0]}
+    },
+    Ships.Battleship: {
+        'cost': {Resources.Metal: [45000, 0], Resources.Crystal: [15000, 0], Resources.Deuterium: [0, 0]}
+    },
+    Ships.Cruiser: {
+        'cost': {Resources.Metal: [20000, 0], Resources.Crystal: [7000, 0], Resources.Deuterium: [2000, 0]}
+    },
+    Ships.HeavyFighter: {
+        'cost': {Resources.Metal: [6000, 0], Resources.Crystal: [4000, 0], Resources.Deuterium: [0, 0]}
+    },
+    Ships.LightFighter: {
+        'cost': {Resources.Metal: [3000, 0], Resources.Crystal: [1000, 0], Resources.Deuterium: [0, 0]}
+    },
+    Ships.LargeCargo: {
+        'cost': {Resources.Metal: [6000, 0], Resources.Crystal: [6000, 0], Resources.Deuterium: [0, 0]},
+        'stock': [5000]
+    },
+    Ships.SmallCargo: {
+        'cost': {Resources.Metal: [2000, 0], Resources.Crystal: [2000, 0], Resources.Deuterium: [0, 0]},
+        'stock': [25000]
+    },
+    Ships.Destroyer: {
+        'cost': {Resources.Metal: [60000, 0], Resources.Crystal: [50000, 0], Resources.Deuterium: [15000, 0]}
+    },
+    Ships.Deathstar: {
+        'cost': {Resources.Metal: [5000000, 0], Resources.Crystal: [4000000, 0], Resources.Deuterium: [1000000, 0]}
+    },
+    Ships.Battlecruiser: {
+        'cost': {Resources.Metal: [30000, 0], Resources.Crystal: [40000, 0], Resources.Deuterium: [15000, 0]}
+    }
 }
