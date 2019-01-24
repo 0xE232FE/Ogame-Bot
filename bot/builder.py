@@ -2,8 +2,8 @@ import math
 
 from bs4 import BeautifulSoup
 
-from lib.ogame import BAD_RESEARCH_ID, constants, BAD_DEFENSE_ID, BAD_SHIP_ID, BAD_BUILDING_ID, Calculate
-from lib.ogame.constants import Resources
+from lib.ogame import BAD_RESEARCH_ID, constants, BAD_DEFENSE_ID, BAD_SHIP_ID, BAD_BUILDING_ID
+from lib.ogame.constants import Resources, Prices, Ships, Defenses
 
 
 class Builder:
@@ -13,7 +13,7 @@ class Builder:
 
     def build_defense(self, defense_id, nbr):
         """Build a defense unit."""
-        if defense_id not in constants.Defense:
+        if defense_id not in constants.Defenses:
             raise BAD_DEFENSE_ID
 
         url = self.bot.get_url('defense', {'cp': self.planet.planet_id})
@@ -74,17 +74,21 @@ class Builder:
     def building_cost(self, building, lvl):
         """ Building cost lvl + 1 """
         return {
-            Resources.Metal: int(math.floor(Calculate[building]['cost'][Resources.Metal][0] *
-                                            Calculate[building]['cost'][Resources.Metal][1] ** (lvl - 1))),
-            Resources.Crystal: int(math.floor(Calculate[building]['cost'][Resources.Crystal][0] *
-                                              Calculate[building]['cost'][Resources.Crystal][1] ** (lvl - 1))),
-            Resources.Deuterium: int(math.floor(Calculate[building]['cost'][Resources.Deuterium][0] *
-                                                Calculate[building]['cost'][Resources.Deuterium][1] ** (lvl - 1)))
+            Resources.Metal: int(math.floor(Prices[building]['cost'][Resources.Metal][0] *
+                                            Prices[building]['cost'][Resources.Metal][1] ** (lvl - 1))),
+            Resources.Crystal: int(math.floor(Prices[building]['cost'][Resources.Crystal][0] *
+                                              Prices[building]['cost'][Resources.Crystal][1] ** (lvl - 1))),
+            Resources.Deuterium: int(math.floor(Prices[building]['cost'][Resources.Deuterium][0] *
+                                                Prices[building]['cost'][Resources.Deuterium][1] ** (lvl - 1)))
         }
 
-    def can_build(self, building, lvl, build_if_can=True) -> bool:
+    def can_build(self, building, lvl=1, build_if_can=True) -> bool:
+        if building not in Ships and building not in Defenses and lvl <= 1:
+            lvl = 2  # fix incorrect level
+
         build_requirements = self.building_cost(building, lvl)
         planet_resources = self.planet.get_resources()
+
         if planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal]:
@@ -111,7 +115,7 @@ class Builder:
             self.build_technology(object_id, cancel=cancel)
         elif object_id in constants.Ships:
             self.build_ships(object_id, nbr)
-        elif object_id in constants.Defense:
+        elif object_id in constants.Defenses:
             self.build_defense(object_id, nbr)
 
     def build(self, arg, cancel=False):

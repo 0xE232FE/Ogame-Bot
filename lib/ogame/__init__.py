@@ -98,8 +98,8 @@ def get_code(name):
         return constants.Buildings[name]
     if name in constants.Facilities.keys():
         return constants.Facilities[name]
-    if name in constants.Defense.keys():
-        return constants.Defense[name]
+    if name in constants.Defenses.keys():
+        return constants.Defenses[name]
     if name in constants.Ships.keys():
         return constants.Ships[name]
     if name in constants.Research.keys():

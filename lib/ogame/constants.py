@@ -44,7 +44,7 @@ class Facilities(IntEnum):
     SpaceDock = 36
 
 
-class Defense(IntEnum):
+class Defenses(IntEnum):
     RocketLauncher = 401
     LightLaser = 402
     HeavyLaser = 403
@@ -119,7 +119,7 @@ class Missions(IntEnum):
     Expedition = 15
 
 
-Calculate = {
+Prices = {
     Buildings.MetalMine: {
         'cost': {Resources.Metal: [60, 1.5], Resources.Crystal: [15, 1.5], Resources.Deuterium: [0, 0]},
         'production': [30, 1.1],

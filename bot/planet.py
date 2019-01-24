@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 
 from lib.ogame import get_nbr, NOT_LOGGED
-from lib.ogame.constants import Buildings, Ships, Resources
+from lib.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
 
 
 class Planet:
@@ -53,88 +53,83 @@ class Planet:
         res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {Buildings.MetalMine: get_nbr(soup, 'supply1'),
-               Buildings.CrystalMine: get_nbr(soup, 'supply2'),
-               Buildings.DeuteriumSynthesizer: get_nbr(soup, 'supply3'),
-               Buildings.SolarPlant: get_nbr(soup, 'supply4'),
-               Buildings.FusionReactor: get_nbr(soup, 'supply12'),
-               Ships.SolarSatellite: get_nbr(soup, 'supply212'),
-               Buildings.MetalStorage: get_nbr(soup, 'supply22'),
-               Buildings.CrystalStorage: get_nbr(soup, 'supply23'),
-               Buildings.DeuteriumTank: get_nbr(soup, 'supply24')}
-        return res
+        return {Buildings.MetalMine: get_nbr(soup, 'supply1'),
+                Buildings.CrystalMine: get_nbr(soup, 'supply2'),
+                Buildings.DeuteriumSynthesizer: get_nbr(soup, 'supply3'),
+                Buildings.SolarPlant: get_nbr(soup, 'supply4'),
+                Buildings.FusionReactor: get_nbr(soup, 'supply12'),
+                Ships.SolarSatellite: get_nbr(soup, 'supply212'),
+                Buildings.MetalStorage: get_nbr(soup, 'supply22'),
+                Buildings.CrystalStorage: get_nbr(soup, 'supply23'),
+                Buildings.DeuteriumTank: get_nbr(soup, 'supply24')}
 
     def get_defense(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('defense', {'cp': planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {'rocket_launcher': get_nbr(soup, 'defense401'),
-               'light_laser': get_nbr(soup, 'defense402'),
-               'heavy_laser': get_nbr(soup, 'defense403'),
-               'gauss_cannon': get_nbr(soup, 'defense404'),
-               'ion_cannon': get_nbr(soup, 'defense405'),
-               'plasma_turret': get_nbr(soup, 'defense406'),
-               'small_shield_dome': get_nbr(soup, 'defense407'),
-               'large_shield_dome': get_nbr(soup, 'defense408'),
-               'anti_ballistic_missiles': get_nbr(soup, 'defense502'),
-               'interplanetary_missiles': get_nbr(soup, 'defense503')}
-        return res
+        return {Defenses.RocketLauncher: get_nbr(soup, 'defense401'),
+                Defenses.LightLaser: get_nbr(soup, 'defense402'),
+                Defenses.HeavyLaser: get_nbr(soup, 'defense403'),
+                Defenses.GaussCannon: get_nbr(soup, 'defense404'),
+                Defenses.IonCannon: get_nbr(soup, 'defense405'),
+                Defenses.PlasmaTurret: get_nbr(soup, 'defense406'),
+                Defenses.SmallShieldDome: get_nbr(soup, 'defense407'),
+                Defenses.LargeShieldDome: get_nbr(soup, 'defense408'),
+                Defenses.AntiBallisticMissiles: get_nbr(soup, 'defense502'),
+                Defenses.InterplanetaryMissiles: get_nbr(soup, 'defense503')}
 
     def get_ships(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('shipyard', {'cp': planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {'light_fighter': get_nbr(soup, 'military204'),
-               'heavy_fighter': get_nbr(soup, 'military205'),
-               'cruiser': get_nbr(soup, 'military206'),
-               'battleship': get_nbr(soup, 'military207'),
-               'battlecruiser': get_nbr(soup, 'military215'),
-               'bomber': get_nbr(soup, 'military211'),
-               'destroyer': get_nbr(soup, 'military213'),
-               'deathstar': get_nbr(soup, 'military214'),
-               'small_cargo': get_nbr(soup, 'civil202'),
-               'large_cargo': get_nbr(soup, 'civil203'),
-               'colony_ship': get_nbr(soup, 'civil208'),
-               'recycler': get_nbr(soup, 'civil209'),
-               'espionage_probe': get_nbr(soup, 'civil210'),
-               'solar_satellite': get_nbr(soup, 'civil212')}
-        return res
+        return {Ships.LightFighter: get_nbr(soup, 'military204'),
+                Ships.HeavyFighter: get_nbr(soup, 'military205'),
+                Ships.Cruiser: get_nbr(soup, 'military206'),
+                Ships.Battleship: get_nbr(soup, 'military207'),
+                Ships.Battlecruiser: get_nbr(soup, 'military215'),
+                Ships.Bomber: get_nbr(soup, 'military211'),
+                Ships.Destroyer: get_nbr(soup, 'military213'),
+                Ships.Deathstar: get_nbr(soup, 'military214'),
+                Ships.SmallCargo: get_nbr(soup, 'civil202'),
+                Ships.LargeCargo: get_nbr(soup, 'civil203'),
+                Ships.ColonyShip: get_nbr(soup, 'civil208'),
+                Ships.Recycler: get_nbr(soup, 'civil209'),
+                Ships.EspionageProbe: get_nbr(soup, 'civil210'),
+                Ships.SolarSatellite: get_nbr(soup, 'civil212')}
 
     def get_facilities(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('station', {'cp': planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {'robotics_factory': get_nbr(soup, 'station14'),
-               'shipyard': get_nbr(soup, 'station21'),
-               'research_lab': get_nbr(soup, 'station31'),
-               'alliance_depot': get_nbr(soup, 'station34'),
-               'missile_silo': get_nbr(soup, 'station44'),
-               'nanite_factory': get_nbr(soup, 'station15'),
-               'terraformer': get_nbr(soup, 'station33'),
-               'space_dock': get_nbr(soup, 'station36')}
-        return res
+        return {Facilities.RoboticsFactory: get_nbr(soup, 'station14'),
+                Facilities.Shipyard: get_nbr(soup, 'station21'),
+                Facilities.ResearchLab: get_nbr(soup, 'station31'),
+                Facilities.AllianceDepot: get_nbr(soup, 'station34'),
+                Facilities.MissileSilo: get_nbr(soup, 'station44'),
+                Facilities.NaniteFactory: get_nbr(soup, 'station15'),
+                Facilities.Terraformer: get_nbr(soup, 'station33'),
+                Facilities.SpaceDock: get_nbr(soup, 'station36')}
 
     def get_research(self):
         res = self.bot.session.get(self.bot.get_url('research')).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
-        res = {'energy_technology': get_nbr(soup, 'research113'),
-               'laser_technology': get_nbr(soup, 'research120'),
-               'ion_technology': get_nbr(soup, 'research121'),
-               'hyperspace_technology': get_nbr(soup, 'research114'),
-               'plasma_technology': get_nbr(soup, 'research122'),
-               'combustion_drive': get_nbr(soup, 'research115'),
-               'impulse_drive': get_nbr(soup, 'research117'),
-               'hyperspace_drive': get_nbr(soup, 'research118'),
-               'espionage_technology': get_nbr(soup, 'research106'),
-               'computer_technology': get_nbr(soup, 'research108'),
-               'astrophysics': get_nbr(soup, 'research124'),
-               'intergalactic_research_network': get_nbr(soup, 'research123'),
-               'graviton_technology': get_nbr(soup, 'research199'),
-               'weapons_technology': get_nbr(soup, 'research109'),
-               'shielding_technology': get_nbr(soup, 'research110'),
-               'armour_technology': get_nbr(soup, 'research111')}
-        return res
+        return {Research.EnergyTechnology: get_nbr(soup, 'research113'),
+                Research.LaserTechnology: get_nbr(soup, 'research120'),
+                Research.IonTechnology: get_nbr(soup, 'research121'),
+                Research.HyperspaceTechnology: get_nbr(soup, 'research114'),
+                Research.PlasmaTechnology: get_nbr(soup, 'research122'),
+                Research.CombustionDrive: get_nbr(soup, 'research115'),
+                Research.ImpulseDrive: get_nbr(soup, 'research117'),
+                Research.HyperspaceDrive: get_nbr(soup, 'research118'),
+                Research.EspionageTechnology: get_nbr(soup, 'research106'),
+                Research.ComputerTechnology: get_nbr(soup, 'research108'),
+                Research.Astrophysics: get_nbr(soup, 'research124'),
+                Research.IntergalacticResearchNetwork: get_nbr(soup, 'research123'),
+                Research.GravitonTechnology: get_nbr(soup, 'research199'),
+                Research.WeaponsTechnology: get_nbr(soup, 'research109'),
+                Research.ShieldingTechnology: get_nbr(soup, 'research110'),
+                Research.ArmourTechnology: get_nbr(soup, 'research111')}
 
     def constructions_being_built(self, planet_id):
         res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).text
