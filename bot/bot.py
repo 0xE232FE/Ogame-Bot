@@ -22,7 +22,7 @@ class Bot:
         self.planets = []
 
     def initialize(self):
-        self.user = User()
+        self.user = User(self)
 
     def is_logged(self, html=None):
         return self.session.is_logged(html=html)

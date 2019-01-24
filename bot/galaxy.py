@@ -7,13 +7,13 @@ from lib.ogame import NOT_LOGGED, parse_int, get_planet_infos_regex
 
 
 class Galaxy:
-    def __init__(self):
-        pass
+    def __init__(self, bot):
+        self.bot = bot
 
     def get_planet_infos(self, planet_id, res=None):
         if not res:
-            res = self.session.get(self.get_url('overview', {'cp': planet_id})).content
-        if not self.is_logged(res):
+            res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         link = soup.find('div', {'id': 'planet-{}'.format(planet_id)})
@@ -52,8 +52,8 @@ class Galaxy:
         headers = {'X-Requested-With': 'XMLHttpRequest',
                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'galaxy': galaxy, 'system': system}
-        url = self.get_url('galaxyContent', {'ajax': 1})
-        res = self.session.post(url, data=payload, headers=headers).content.decode('utf8')
+        url = self.bot.get_url('galaxyContent', {'ajax': 1})
+        res = self.bot.session.post(url, data=payload, headers=headers).content.decode('utf8')
         try:
             obj = json.loads(res)
         except ValueError:

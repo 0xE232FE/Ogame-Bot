@@ -2,7 +2,7 @@ import re
 
 from bs4 import BeautifulSoup
 
-from lib.ogame import NOT_LOGGED
+from lib.ogame import NOT_LOGGED, parse_int
 
 
 class User:
@@ -82,7 +82,7 @@ class User:
     def get_attacks(self):
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         res = self.bot.session.get(self.bot.get_url('eventList'), params={'ajax': 1},
-                               headers=headers).content
+                                   headers=headers).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
             raise NOT_LOGGED

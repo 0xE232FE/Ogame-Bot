@@ -14,10 +14,10 @@ class Builder:
         if defense_id not in constants.Defense.values():
             raise BAD_DEFENSE_ID
 
-        url = self.get_url('defense', {'cp': planet_id})
+        url = self.bot.get_url('defense', {'cp': planet_id})
 
-        res = self.session.get(url).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(url).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         form = soup.find('form')
@@ -27,17 +27,17 @@ class Builder:
                    'modus': 1,
                    'token': token,
                    'type': defense_id}
-        self.session.post(url, data=payload)
+        self.bot.session.post(url, data=payload)
 
     def build_ships(self, planet_id, ship_id, nbr):
         """Build a ship unit."""
         if ship_id not in constants.Ships.values():
             raise BAD_SHIP_ID
 
-        url = self.get_url('shipyard', {'cp': planet_id})
+        url = self.bot.get_url('shipyard', {'cp': planet_id})
 
-        res = self.session.get(url).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(url).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         form = soup.find('form')
@@ -47,17 +47,17 @@ class Builder:
                    'modus': 1,
                    'token': token,
                    'type': ship_id}
-        self.session.post(url, data=payload)
+        self.bot.session.post(url, data=payload)
 
     def build_building(self, planet_id, building_id, cancel=False):
         """Build a building."""
         if building_id not in constants.Buildings.values() and building_id not in constants.Facilities.values():
             raise BAD_BUILDING_ID
 
-        url = self.get_url('resources', {'cp': planet_id})
+        url = self.bot.get_url('resources', {'cp': planet_id})
 
-        res = self.session.get(url).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(url).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         # is_idle = bool(soup.find('td', {'class': 'idle'}))
@@ -69,7 +69,7 @@ class Builder:
         payload = {'modus': modus,
                    'token': token,
                    'type': building_id}
-        self.session.post(url, data=payload)
+        self.bot.session.post(url, data=payload)
         # return True
 
     def building_cost(self, category, building, lvl):
@@ -90,12 +90,12 @@ class Builder:
         if technology_id not in constants.Research.values():
             raise BAD_RESEARCH_ID
 
-        url = self.get_url('research', {'cp': planet_id})
+        url = self.bot.get_url('research', {'cp': planet_id})
         modus = 2 if cancel else 1
         payload = {'modus': modus,
                    'type': technology_id}
-        res = self.session.post(url, data=payload).content
-        if not self.is_logged(res):
+        res = self.bot.session.post(url, data=payload).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
 
     def _build(self, planet_id, object_id, nbr=None, cancel=False):

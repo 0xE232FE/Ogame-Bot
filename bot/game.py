@@ -4,12 +4,12 @@ from lib.ogame import NOT_LOGGED, parse_int, metal_mine_production
 
 
 class Game:
-    def __init__(self):
-        pass
+    def __init__(self, bot):
+        self.bot = bot
 
     def get_universe_speed(self, res=None):
         if not res:
-            res = self.session.get(self.get_url('techtree', {'tab': 2, 'techID': 1})).content
+            res = self.bot.session.get(self.bot.get_url('techtree', {'tab': 2, 'techID': 1})).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
             raise NOT_LOGGED

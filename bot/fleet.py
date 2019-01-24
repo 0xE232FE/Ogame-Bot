@@ -6,8 +6,8 @@ from lib.ogame import parse_int, NOT_LOGGED, constants, get_code
 
 
 class Fleet:
-    def __init__(self):
-        pass
+    def __init__(self, bot):
+        self.bot = bot
 
     def send_fleet(self, planet_id, ships, speed, where, mission, resources):
         def get_hidden_fields(html):
@@ -20,16 +20,16 @@ class Fleet:
                 fields[name] = value
             return fields
 
-        url = self.get_url('fleet1', {'cp': planet_id})
+        url = self.bot.get_url('fleet1', {'cp': planet_id})
 
-        res = self.session.get(url).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(url).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         payload = {}
         payload.update(get_hidden_fields(res))
         for name, value in ships:
             payload['am{}'.format(name)] = value
-        res = self.session.post(self.get_url('fleet2'), data=payload).content
+        res = self.bot.session.post(self.bot.get_url('fleet2'), data=payload).content
 
         payload = {}
         payload.update(get_hidden_fields(res))
@@ -43,7 +43,7 @@ class Fleet:
             # debris type: 2
             # moon type: 3
             payload.update({'type': 2})  # Send to debris field
-        res = self.session.post(self.get_url('fleet3'), data=payload).content
+        res = self.bot.session.post(self.bot.get_url('fleet3'), data=payload).content
 
         payload = {}
         payload.update(get_hidden_fields(res))
@@ -51,9 +51,9 @@ class Fleet:
                         'deuterium': resources.get('deuterium'),
                         'metal': resources.get('metal'),
                         'mission': mission})
-        res = self.session.post(self.get_url('movement'), data=payload).content
+        res = self.bot.session.post(self.bot.get_url('movement'), data=payload).content
 
-        res = self.session.get(self.get_url('movement')).content
+        res = self.bot.session.get(self.bot.get_url('movement')).content
         soup = BeautifulSoup(res, 'html.parser')
         origin_coords = soup.find('meta', {'name': 'ogame-planet-coordinates'})['content']
         fleets = soup.findAll('div', {'class': 'fleetDetails'})
@@ -73,13 +73,13 @@ class Fleet:
         return None
 
     def cancel_fleet(self, fleet_id):
-        res = self.session.get(self.get_url('movement') + '&return={}'.format(fleet_id)).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('movement') + '&return={}'.format(fleet_id)).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
 
     def get_fleets(self):
-        res = self.session.get(self.get_url('movement')).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('movement')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         fleets = []
         soup = BeautifulSoup(res, 'html.parser')
@@ -160,8 +160,8 @@ class Fleet:
 
     def get_fleet_ids(self):
         """Return the reversable fleet ids."""
-        res = self.session.get(self.get_url('movement')).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('movement')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         spans = soup.findAll('span', {'class': 'reversal'})

@@ -7,12 +7,13 @@ from lib.ogame import get_nbr, NOT_LOGGED
 
 
 class Planet:
-    def __init__(self, planet_id):
+    def __init__(self, bot, planet_id):
+        self.bot = bot
         self.planet_id = planet_id
 
     def fetch_resources(self, planet_id):
-        url = self.get_url('fetchResources', {'cp': planet_id})
-        res = self.session.get(url).content.decode('utf8')
+        url = self.bot.get_url('fetchResources', {'cp': planet_id})
+        res = self.bot.session.get(url).content.decode('utf8')
         try:
             obj = json.loads(res)
         except ValueError:
@@ -20,8 +21,8 @@ class Planet:
         return obj
 
     def get_resource_settings(self, planet_id):
-        html = self.session.get(self.get_url('resourceSettings', {'cp': planet_id})).content
-        if not self.is_logged(html):
+        html = self.bot.session.get(self.bot.get_url('resourceSettings', {'cp': planet_id})).content
+        if not self.bot.is_logged(html):
             raise NOT_LOGGED
         soup = BeautifulSoup(html, 'html.parser')
         options = soup.find_all('option', {'selected': True})
@@ -46,8 +47,8 @@ class Planet:
         return result
 
     def get_resources_buildings(self, planet_id):
-        res = self.session.get(self.get_url('resources', {'cp': planet_id})).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('resources', {'cp': planet_id})).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         res = {'metal_mine': get_nbr(soup, 'supply1'), 'crystal_mine': get_nbr(soup, 'supply2'),
@@ -58,8 +59,8 @@ class Planet:
         return res
 
     def get_defense(self, planet_id):
-        res = self.session.get(self.get_url('defense', {'cp': planet_id})).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('defense', {'cp': planet_id})).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         res = {'rocket_launcher': get_nbr(soup, 'defense401'),
@@ -75,8 +76,8 @@ class Planet:
         return res
 
     def get_ships(self, planet_id):
-        res = self.session.get(self.get_url('shipyard', {'cp': planet_id})).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('shipyard', {'cp': planet_id})).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         res = {'light_fighter': get_nbr(soup, 'military204'),
@@ -96,8 +97,8 @@ class Planet:
         return res
 
     def get_facilities(self, planet_id):
-        res = self.session.get(self.get_url('station', {'cp': planet_id})).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('station', {'cp': planet_id})).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         res = {'robotics_factory': get_nbr(soup, 'station14'),
@@ -111,8 +112,8 @@ class Planet:
         return res
 
     def get_research(self):
-        res = self.session.get(self.get_url('research')).content
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('research')).content
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         soup = BeautifulSoup(res, 'html.parser')
         res = {'energy_technology': get_nbr(soup, 'research113'),
@@ -134,8 +135,8 @@ class Planet:
         return res
 
     def constructions_being_built(self, planet_id):
-        res = self.session.get(self.get_url('overview', {'cp': planet_id})).text
-        if not self.is_logged(res):
+        res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).text
+        if not self.bot.is_logged(res):
             raise NOT_LOGGED
         buildingCountdown = 0
         buildingID = 0
