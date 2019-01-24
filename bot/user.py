@@ -12,7 +12,7 @@ class User:
 
     def get_user_infos(self, html=None):
         if not html:
-            html = self.bot.session.get(self.bot.get_url('overview')).content
+            html = self.bot.wrapper.session.get(self.bot.get_url('overview')).content
         self.bot.is_logged(html)
         soup = BeautifulSoup(re.search(r'textContent\[7\]="([^"]+)"', html).group(1), 'html.parser')
         infos = re.search(r'([\d\\.]+) \(Place ([\d\.]+) of ([\d\.]+)\)', soup.text)
@@ -29,7 +29,7 @@ class User:
     def get_planet_ids(self, res=None):
         """Get the ids of your planets."""
         if not res:
-            res = self.bot.session.get(self.bot.get_url('overview')).content
+            res = self.bot.wrapper.session.get(self.bot.get_url('overview')).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
@@ -38,7 +38,7 @@ class User:
     def get_moon_ids(self, res=None):
         """Get the ids of your moons."""
         if not res:
-            res = self.bot.session.get(self.bot.get_url('overview')).content
+            res = self.bot.wrapper.session.get(self.bot.get_url('overview')).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         moons = soup.findAll('a', {'class': 'moonlink'})
@@ -47,7 +47,7 @@ class User:
     def get_planet_by_name(self, planet_name, res=None):
         """Returns the first planet id with the specified name."""
         if not res:
-            res = self.bot.session.get(self.bot.get_url('overview')).content
+            res = self.bot.wrapper.session.get(self.bot.get_url('overview')).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         planets = soup.findAll('div', {'class': 'smallplanet'})
@@ -66,7 +66,7 @@ class User:
                    'mode': 1,
                    'ajax': 1}
         url = self.bot.get_url('ajaxChat')
-        self.bot.session.post(url, data=payload, headers=headers)
+        self.bot.wrapper.session.post(url, data=payload, headers=headers)
 
     def is_under_attack(self, json_obj=None):
         if not json_obj:
@@ -75,7 +75,7 @@ class User:
 
     def get_attacks(self):
         headers = {'X-Requested-With': 'XMLHttpRequest'}
-        res = self.bot.session.get(self.bot.get_url('eventList'), params={'ajax': 1},
+        res = self.bot.wrapper.session.get(self.bot.get_url('eventList'), params={'ajax': 1},
                                    headers=headers).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):

@@ -16,7 +16,7 @@ class Bot:
         self.user_name = user_name
         self.password = password
 
-        self.session = None
+        self.wrapper = None
         self.modes = []
 
         self.user = None
@@ -28,20 +28,20 @@ class Bot:
             self.planets.append(Planet(self, planet_id))
 
     def is_logged(self, html=None):
-        if not self.session.is_logged(html=html):
+        if not self.wrapper.is_logged(html=html):
             raise NOT_LOGGED
         return True
 
     def get_url(self, page, params=None):
-        return self.session.get_url(page=page, params=params)
+        return self.wrapper.get_url(page=page, params=params)
 
     def fetch_eventbox(self):
-        return self.session.fetch_eventbox()
+        return self.wrapper.fetch_eventbox()
 
     def connect(self):
         try:
             logging.info(f"{self.__class__.__name__}:: Try to login...")
-            self.session = OGame(self.server_name, self.user_name, self.password)
+            self.wrapper = OGame(self.server_name, self.user_name, self.password)
             logging.info(f"{self.__class__.__name__}:: Login successful.")
         except BAD_CREDENTIALS:
             logging.error(f"{self.__class__.__name__}:: Please verify your credentials.")
@@ -57,7 +57,7 @@ class Bot:
     def active_mode(self, mode_name):
         if any(m.__name__ == mode_name
                for m in Mode.__subclasses__()):
-            self.modes.append(getattr(modes, mode_name)(self, self.session))
+            self.modes.append(getattr(modes, mode_name)(self, self.wrapper))
         else:
             logging.error(f"Cant find {mode_name} mode")
             os._exit(1)

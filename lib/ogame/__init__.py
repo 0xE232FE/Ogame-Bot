@@ -179,9 +179,6 @@ class OGame(object):
         else:
             raise BAD_CREDENTIALS
 
-    def get(self, *args):
-        return self.session.get(*args)
-
     def logout(self):
         self.session.get(self.get_url('logout'))
 

@@ -9,7 +9,7 @@ class Game:
 
     def get_universe_speed(self, res=None):
         if not res:
-            res = self.bot.session.get(self.bot.get_url('techtree', {'tab': 2, 'techID': 1})).content
+            res = self.bot.wrapper.session.get(self.bot.get_url('techtree', {'tab': 2, 'techID': 1})).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
             raise NOT_LOGGED

@@ -12,7 +12,7 @@ class Galaxy:
 
     def get_planet_infos(self, planet_id, res=None):
         if not res:
-            res = self.bot.session.get(self.bot.get_url('overview', {'cp': planet_id})).content
+            res = self.bot.wrapper.session.get(self.bot.get_url('overview', {'cp': planet_id})).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         link = soup.find('div', {'id': 'planet-{}'.format(planet_id)})
@@ -52,7 +52,7 @@ class Galaxy:
                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'galaxy': galaxy, 'system': system}
         url = self.bot.get_url('galaxyContent', {'ajax': 1})
-        res = self.bot.session.post(url, data=payload, headers=headers).content.decode('utf8')
+        res = self.bot.wrapper.session.post(url, data=payload, headers=headers).content.decode('utf8')
         try:
             obj = json.loads(res)
         except ValueError:

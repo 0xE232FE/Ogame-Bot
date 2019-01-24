@@ -18,7 +18,7 @@ class Builder:
 
         url = self.bot.get_url('defense', {'cp': self.planet.planet_id})
 
-        res = self.bot.session.get(url).content
+        res = self.bot.wrapper.session.get(url).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         form = soup.find('form')
@@ -28,7 +28,7 @@ class Builder:
                    'modus': 1,
                    'token': token,
                    'type': defense_id}
-        self.bot.session.post(url, data=payload)
+        self.bot.wrapper.session.post(url, data=payload)
 
     def build_ships(self, ship_id, nbr):
         """Build a ship unit."""
@@ -37,7 +37,7 @@ class Builder:
 
         url = self.bot.get_url('shipyard', {'cp': self.planet.planet_id})
 
-        res = self.bot.session.get(url).content
+        res = self.bot.wrapper.session.get(url).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         form = soup.find('form')
@@ -47,7 +47,7 @@ class Builder:
                    'modus': 1,
                    'token': token,
                    'type': ship_id}
-        self.bot.session.post(url, data=payload)
+        self.bot.wrapper.session.post(url, data=payload)
 
     def build_building(self, building_id, cancel=False):
         """Build a building."""
@@ -56,7 +56,7 @@ class Builder:
 
         url = self.bot.get_url('resources', {'cp': self.planet.planet_id})
 
-        res = self.bot.session.get(url).content
+        res = self.bot.wrapper.session.get(url).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         # is_idle = bool(soup.find('td', {'class': 'idle'}))
@@ -68,7 +68,7 @@ class Builder:
         payload = {'modus': modus,
                    'token': token,
                    'type': building_id}
-        self.bot.session.post(url, data=payload)
+        self.bot.wrapper.session.post(url, data=payload)
         # return True
 
     def building_cost(self, building, lvl):
@@ -107,7 +107,7 @@ class Builder:
         modus = 2 if cancel else 1
         payload = {'modus': modus,
                    'type': technology_id}
-        res = self.bot.session.post(url, data=payload).content
+        res = self.bot.wrapper.session.post(url, data=payload).content
         self.bot.is_logged(res)
 
     def _build(self, object_id, nbr=None, cancel=False):

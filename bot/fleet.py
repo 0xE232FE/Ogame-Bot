@@ -22,13 +22,13 @@ class Fleet:
 
         url = self.bot.get_url('fleet1', {'cp': planet_id})
 
-        res = self.bot.session.get(url).content
+        res = self.bot.wrapper.session.get(url).content
         self.bot.is_logged(res)
         payload = {}
         payload.update(get_hidden_fields(res))
         for name, value in ships:
             payload['am{}'.format(name)] = value
-        res = self.bot.session.post(self.bot.get_url('fleet2'), data=payload).content
+        res = self.bot.wrapper.session.post(self.bot.get_url('fleet2'), data=payload).content
 
         payload = {}
         payload.update(get_hidden_fields(res))
@@ -42,7 +42,7 @@ class Fleet:
             # debris type: 2
             # moon type: 3
             payload.update({'type': 2})  # Send to debris field
-        res = self.bot.session.post(self.bot.get_url('fleet3'), data=payload).content
+        res = self.bot.wrapper.session.post(self.bot.get_url('fleet3'), data=payload).content
 
         payload = {}
         payload.update(get_hidden_fields(res))
@@ -50,9 +50,9 @@ class Fleet:
                         'deuterium': resources.get('deuterium'),
                         'metal': resources.get('metal'),
                         'mission': mission})
-        res = self.bot.session.post(self.bot.get_url('movement'), data=payload).content
+        res = self.bot.wrapper.session.post(self.bot.get_url('movement'), data=payload).content
 
-        res = self.bot.session.get(self.bot.get_url('movement')).content
+        res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content
         soup = BeautifulSoup(res, 'html.parser')
         origin_coords = soup.find('meta', {'name': 'ogame-planet-coordinates'})['content']
         fleets = soup.findAll('div', {'class': 'fleetDetails'})
@@ -72,11 +72,11 @@ class Fleet:
         return None
 
     def cancel_fleet(self, fleet_id):
-        res = self.bot.session.get(self.bot.get_url('movement') + '&return={}'.format(fleet_id)).content
+        res = self.bot.wrapper.session.get(self.bot.get_url('movement') + '&return={}'.format(fleet_id)).content
         self.bot.is_logged(res)
 
     def get_fleets(self):
-        res = self.bot.session.get(self.bot.get_url('movement')).content
+        res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content
         self.bot.is_logged(res)
         fleets = []
         soup = BeautifulSoup(res, 'html.parser')
@@ -157,7 +157,7 @@ class Fleet:
 
     def get_fleet_ids(self):
         """Return the reversable fleet ids."""
-        res = self.bot.session.get(self.bot.get_url('movement')).content
+        res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content
         self.bot.is_logged(res)
         soup = BeautifulSoup(res, 'html.parser')
         spans = soup.findAll('span', {'class': 'reversal'})

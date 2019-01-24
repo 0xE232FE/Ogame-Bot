@@ -33,6 +33,6 @@ class StarterBuilderMode(Mode):
                                              lvl=planet_buildings_level[building] + 1,
                                              planet_resources=None,
                                              build_if_can=True)
-                    time.sleep(random.randint(10, 60))
+                    time.sleep(random.randint(10, 30))
 
             time.sleep(self.SLEEPING_TIME_FACTOR * random.randint(2, 25))
