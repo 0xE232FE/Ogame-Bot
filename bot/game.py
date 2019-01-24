@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from lib.ogame import NOT_LOGGED
+from lib.ogame import NOT_LOGGED, parse_int, metal_mine_production
 
 
 class Game:
