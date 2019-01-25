@@ -27,15 +27,12 @@ class StarterBuilderMode(Mode):
                                  Research.EnergyTechnology, Research.CombustionDrive, Research.LaserTechnology,
                                  Research.ComputerTechnology, Research.EspionageTechnology]
 
-                planet_buildings_level = {**planet.get_resources_buildings(),
-                                          **planet.get_facilities(),
-                                          **planet.get_research()}
+                planet_buildings = planet.get_planet_buildings()
 
                 for _ in range(1, random.randint(2, 20)):
                     building = random.choice(dict_to_build)
                     if (planet.builder.can_build(building,
-                                                 lvl=planet_buildings_level[building] + 1,
-                                                 planet_resources=None,
+                                                 planet_buildings=planet_buildings,
                                                  build_if_can=True)):
                         logging.info(f"{self.__class__.__name__}:: Start building {building}...")
                     time.sleep(random.randint(2, 60))

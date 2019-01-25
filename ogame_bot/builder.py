@@ -98,7 +98,8 @@ class Builder:
     def construction_time(self):
         pass # TODO https://ogame.fandom.com/wiki/Buildings
 
-    def building_cost(self, building, lvl):
+    @staticmethod
+    def building_cost(building, lvl):
         """ Building cost lvl + 1 """
         return {
             Resources.Metal: int(math.floor(Prices[building]['cost'][Resources.Metal][0] *
@@ -109,9 +110,23 @@ class Builder:
                                                 Prices[building]['cost'][Resources.Deuterium][1] ** (lvl - 1)))
         }
 
-    def can_build(self, building, lvl=1, planet_resources=None, build_if_can=True) -> bool:
-        if building not in Ships and building not in Defenses and lvl <= 1:
-            lvl = 2  # fix incorrect level
+    @staticmethod
+    def building_prerequisites(building):
+        if 'prerequisites' in Prices[building]:
+            pass
+        return True
+
+    def can_build(self, building, count=1, planet_resources=None, planet_buildings=None, build_if_can=True) -> bool:
+        lvl = 0
+
+        if not planet_buildings:
+            planet_buildings = self.planet.get_planet_buildings()
+
+        if building not in Ships and building not in Defenses:
+            try:
+                lvl = planet_buildings[building] + 1
+            except KeyError:
+                lvl = 1
 
         build_requirements = self.building_cost(building, lvl)
 
@@ -120,7 +135,8 @@ class Builder:
 
         if planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
-                planet_resources[Resources.Metal] >= build_requirements[Resources.Metal]:
+                planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
+                self.building_prerequisites(building):
             if build_if_can:
                 self._build(building)
             return True

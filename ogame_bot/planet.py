@@ -139,6 +139,19 @@ class Planet:
                 Research.ShieldingTechnology: get_nbr(soup, 'research110'),
                 Research.ArmourTechnology: get_nbr(soup, 'research111')}
 
+    def get_planet_buildings(self):
+        return {
+            **self.get_resources_buildings(),
+            **self.get_facilities(),
+            **self.get_research()
+        }
+
+    def get_planet_ships_and_defenses(self):
+        return {
+            **self.get_ships(),
+            **self.get_defense()
+        }
+
     @retry_if_logged_out
     def constructions_being_built(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('overview', {'cp': self.planet_id})).text
