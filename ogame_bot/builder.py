@@ -96,7 +96,7 @@ class Builder:
         self.bot.is_logged(res)
 
     def construction_time(self):
-        pass # TODO https://ogame.fandom.com/wiki/Buildings
+        pass  # TODO https://ogame.fandom.com/wiki/Buildings
 
     @staticmethod
     def building_cost(building, lvl):
@@ -111,12 +111,18 @@ class Builder:
         }
 
     @staticmethod
-    def building_prerequisites(building):
+    def building_prerequisites(building, planet_buildings):
         if 'prerequisites' in Prices[building]:
-            pass
-        return True
+            status = True
+            for prerequisite in Prices[building]['prerequisites']:
+                if prerequisite['building'] not in planet_buildings or \
+                        planet_buildings[building] < prerequisite['level']:
+                    status = False
+            return status
+        else:
+            return True
 
-    def can_build(self, building, count=1, planet_resources=None, planet_buildings=None, build_if_can=True) -> bool:
+    def can_build(self, building, nbr=1, planet_resources=None, planet_buildings=None, build_if_can=True) -> bool:
         lvl = 0
 
         if not planet_buildings:
@@ -136,9 +142,12 @@ class Builder:
         if planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
                 planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
-                self.building_prerequisites(building):
+                self.building_prerequisites(building, planet_buildings):
             if build_if_can:
-                self._build(building)
+                if building in Ships or building in Defenses:
+                    self._build(building, nbr=nbr)
+                else:
+                    self._build(building)
             return True
         return False
 
