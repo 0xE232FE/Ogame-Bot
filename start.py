@@ -2,7 +2,8 @@ import argparse
 import logging
 import sys
 
-from bot.bot import Bot
+import ogame_bot
+from ogame_bot.bot import Bot
 
 
 def main(args=None):
@@ -22,6 +23,8 @@ def main(args=None):
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Bot is starting...")
     bot = Bot(args.servername, args.username, args.password)
+
+    ogame_bot.__init__(bot)
     bot.connect()
     bot.initialize()
     bot.active_mode(args.mode)

@@ -1,15 +1,18 @@
+import logging
 import re
 
 from bs4 import BeautifulSoup
 
-from lib.ogame import NOT_LOGGED, parse_int
+from ogame_bot import get_bot, retry_if_logged_out
+from lib.ogame import parse_int
 from lib.ogame.constants import Me
 
 
 class User:
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self):
+        self.bot = get_bot()
 
+    @retry_if_logged_out
     def get_user_infos(self, html=None):
         if not html:
             html = self.bot.wrapper.session.get(self.bot.get_url('overview')).content
@@ -26,6 +29,7 @@ class User:
             Me.Total: parse_int(infos.group(3))
         }
 
+    @retry_if_logged_out
     def get_planet_ids(self, res=None):
         """Get the ids of your planets."""
         if not res:
@@ -35,6 +39,7 @@ class User:
         planets = soup.findAll('div', {'class': 'smallplanet'})
         return [planet['id'].replace('planet-', '') for planet in planets]
 
+    @retry_if_logged_out
     def get_moon_ids(self, res=None):
         """Get the ids of your moons."""
         if not res:
@@ -44,6 +49,7 @@ class User:
         moons = soup.findAll('a', {'class': 'moonlink'})
         return [moon['href'].split('&cp=')[1] for moon in moons]
 
+    @retry_if_logged_out
     def get_planet_by_name(self, planet_name, res=None):
         """Returns the first planet id with the specified name."""
         if not res:
@@ -79,7 +85,7 @@ class User:
                                    headers=headers).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         events = soup.findAll('tr', {'class': 'eventFleet'})
         events = filter(lambda x: 'partnerInfo' not in x.get('class', []), events)
         events += soup.findAll('tr', {'class': 'allianceAttack'})

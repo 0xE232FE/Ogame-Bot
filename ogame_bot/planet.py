@@ -1,32 +1,36 @@
 import json
+import logging
 import re
 
 from bs4 import BeautifulSoup
 
-from bot.builder import Builder
+from ogame_bot import get_bot, retry_if_logged_out
+from ogame_bot.builder import Builder
 from lib.ogame import get_nbr, NOT_LOGGED
 from lib.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
 
 
 class Planet:
-    def __init__(self, bot, planet_id):
-        self.bot = bot
+    def __init__(self, planet_id):
+        self.bot = get_bot()
         self.planet_id = planet_id
-        self.builder = Builder(self.bot, self)
+        self.builder = Builder(self)
 
+    @retry_if_logged_out
     def fetch_resources(self):
         url = self.bot.get_url('fetchResources', {'cp': self.planet_id})
         res = self.bot.wrapper.session.get(url).content.decode('utf8')
+        self.bot.is_logged()
         try:
-            obj = json.loads(res)
+            return json.loads(res)
         except ValueError:
-            raise NOT_LOGGED
-        return obj
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
+            return {}
 
+    @retry_if_logged_out
     def get_resource_settings(self):
         html = self.bot.wrapper.session.get(self.bot.get_url('resourceSettings', {'cp': self.planet_id})).content
-        if not self.bot.is_logged(html):
-            raise NOT_LOGGED
+        self.bot.is_logged(html)
         soup = BeautifulSoup(html, 'html.parser')
         options = soup.find_all('option', {'selected': True})
         res = {Buildings.MetalMine: options[0]['value'],
@@ -37,15 +41,18 @@ class Planet:
                Ships.SolarSatellite: options[5]['value']}
         return res
 
+    @retry_if_logged_out
     def get_resources(self):
         """Returns the planet resources stats."""
         resources = self.fetch_resources()
+        self.bot.is_logged()
         return {Resources.Metal: resources['metal']['resources']['actual'],
                 Resources.Crystal: resources['crystal']['resources']['actual'],
                 Resources.Deuterium: resources['deuterium']['resources']['actual'],
                 Resources.Energy: resources['energy']['resources']['actual'],
                 Resources.DarkMatter: resources['darkmatter']['resources']['actual']}
 
+    @retry_if_logged_out
     def get_resources_buildings(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('resources', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
@@ -60,6 +67,7 @@ class Planet:
                 Buildings.CrystalStorage: get_nbr(soup, 'supply23'),
                 Buildings.DeuteriumTank: get_nbr(soup, 'supply24')}
 
+    @retry_if_logged_out
     def get_defense(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('defense', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
@@ -75,6 +83,7 @@ class Planet:
                 Defenses.AntiBallisticMissiles: get_nbr(soup, 'defense502'),
                 Defenses.InterplanetaryMissiles: get_nbr(soup, 'defense503')}
 
+    @retry_if_logged_out
     def get_ships(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('shipyard', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
@@ -94,6 +103,7 @@ class Planet:
                 Ships.EspionageProbe: get_nbr(soup, 'civil210'),
                 Ships.SolarSatellite: get_nbr(soup, 'civil212')}
 
+    @retry_if_logged_out
     def get_facilities(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('station', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
@@ -107,6 +117,7 @@ class Planet:
                 Facilities.Terraformer: get_nbr(soup, 'station33'),
                 Facilities.SpaceDock: get_nbr(soup, 'station36')}
 
+    @retry_if_logged_out
     def get_research(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('research')).content
         self.bot.is_logged(res)
@@ -128,6 +139,7 @@ class Planet:
                 Research.ShieldingTechnology: get_nbr(soup, 'research110'),
                 Research.ArmourTechnology: get_nbr(soup, 'research111')}
 
+    @retry_if_logged_out
     def constructions_being_built(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('overview', {'cp': self.planet_id})).text
         self.bot.is_logged(res)

@@ -4,7 +4,7 @@ import time
 
 from lib.ogame.constants import Buildings, Facilities, Research
 
-from bot.modes.mode import Mode
+from ogame_bot.modes.mode import Mode
 
 
 class StarterBuilderMode(Mode):

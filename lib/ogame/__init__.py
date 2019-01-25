@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import math
 import re
 import time
@@ -16,58 +17,6 @@ from dateutil import tz
 
 def parse_int(text):
     return int(text.replace('.', '').replace(',', '').strip())
-
-
-def for_all_methods(decorator):
-    def decorate(cls):
-        for attr in cls.__dict__:  # there's propably a better way to do this
-            if callable(getattr(cls, attr)):
-                setattr(cls, attr, retry_if_logged_out(decorator(getattr(cls, attr))))
-        return cls
-
-    return decorate
-
-
-def sandbox_decorator(some_fn):
-    def wrapper(ogame, *args, **kwargs):
-        fn_name = some_fn.__name__
-
-        local_fns = ['get_datetime_from_time']
-
-        if fn_name in local_fns:
-            return some_fn(ogame, *args, **kwargs)
-
-        if fn_name == '__init__' or not ogame.sandbox:
-            return some_fn(ogame, *args, **kwargs)
-
-        if fn_name in ogame.sandbox_obj:
-            return ogame.sandbox_obj[fn_name]
-
-        return None
-
-    return wrapper
-
-
-def retry_if_logged_out(method):
-    def wrapper(self, *args, **kwargs):
-        attempt = 0
-        time_to_sleep = 0
-        working = False
-        while not working:
-            try:
-                working = True
-                res = method(self, *args, **kwargs)
-            except NOT_LOGGED:
-                time.sleep(time_to_sleep)
-                attempt += 1
-                time_to_sleep += 1
-                if attempt > 5:
-                    raise CANT_PROCESS
-                working = False
-                self.login()
-        return res
-
-    return wrapper
 
 
 def get_nbr(soup, name):
@@ -106,7 +55,6 @@ def get_code(name):
     return None
 
 
-@for_all_methods(sandbox_decorator)
 class OGame(object):
     TIME_SLEEP_MAX = 2
 
@@ -196,7 +144,7 @@ class OGame(object):
             payload.update({'cp': cp})
         html = self.session.get(self.get_url(page, payload)).content
         if not self.is_logged(html):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         return html
 
     def get_universe_speed(self, res=None):
@@ -204,7 +152,7 @@ class OGame(object):
             res = self.session.get(self.get_url('techtree', {'tab': 2, 'techID': 1})).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         spans = soup.findAll('span', {'class': 'undermark'})
         level = parse_int(spans[0].text)
         val = parse_int(spans[1].text)
@@ -215,10 +163,10 @@ class OGame(object):
     def fetch_eventbox(self):
         res = self.session.get(self.get_url('fetchEventbox')).content.decode('utf8')
         try:
-            obj = json.loads(res)
+            return json.loads(res)
         except ValueError:
-            raise NOT_LOGGED
-        return obj
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
+            return {}
 
     def get_datetime_from_time(self, hour, minute, second):
         attack_time = arrow.utcnow().to(self.server_tz).replace(hour=hour, minute=minute, second=second)
@@ -266,7 +214,7 @@ class OGame(object):
         """Get the ogame server time."""
         res = self.session.get(self.get_url('overview')).content
         if not self.is_logged(res):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         soup = BeautifulSoup(res, 'html.parser')
         date_str = soup.find('li', {'class': 'OGameClock'}).text
         date_format = '%d.%m.%Y %H:%M:%S'
@@ -278,7 +226,7 @@ class OGame(object):
         if not res:
             res = self.session.get(self.get_url('overview')).content
         if not self.is_logged(res):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         soup = BeautifulSoup(res, 'html.parser')
         footer = soup.find('div', {'id': 'siteFooter'})
         version = footer.find('a').text.strip()
@@ -287,7 +235,7 @@ class OGame(object):
     def get_overview(self, planet_id):
         html = self.session.get(self.get_url('overview', {'cp': planet_id})).content
         if not self.is_logged(html):
-            raise NOT_LOGGED
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
         soup = BeautifulSoup(html, 'html.parser')
         boxes = soup.findAll('div', {'class': 'content-box-s'})
         res = {}

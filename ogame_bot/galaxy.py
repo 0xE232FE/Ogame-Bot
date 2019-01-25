@@ -1,15 +1,18 @@
 import json
+import logging
 import re
 
 from bs4 import BeautifulSoup
 
-from lib.ogame import NOT_LOGGED, parse_int, get_planet_infos_regex
+from ogame_bot import get_bot, retry_if_logged_out
+from lib.ogame import parse_int, get_planet_infos_regex
 
 
 class Galaxy:
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self):
+        self.bot = get_bot()
 
+    @retry_if_logged_out
     def get_planet_infos(self, planet_id, res=None):
         if not res:
             res = self.bot.wrapper.session.get(self.bot.get_url('overview', {'cp': planet_id})).content
@@ -54,12 +57,15 @@ class Galaxy:
         url = self.bot.get_url('galaxyContent', {'ajax': 1})
         res = self.bot.wrapper.session.post(url, data=payload, headers=headers).content.decode('utf8')
         try:
-            obj = json.loads(res)
+            return json.loads(res)
         except ValueError:
-            raise NOT_LOGGED
-        return obj
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
+            return {}
 
     def galaxy_infos(self, galaxy, system):
+        player_id = ""
+        player_name = ""
+        player_rank = ""
         html = self.galaxy_content(galaxy, system)['galaxy']
         soup = BeautifulSoup(html, 'html.parser')
         rows = soup.findAll('tr', {'class': 'row'})

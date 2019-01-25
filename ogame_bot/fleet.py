@@ -2,13 +2,15 @@ import re
 
 from bs4 import BeautifulSoup
 
+from ogame_bot import get_bot, retry_if_logged_out
 from lib.ogame import parse_int, constants, get_code
 
 
 class Fleet:
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self):
+        self.bot = get_bot()
 
+    @retry_if_logged_out
     def send_fleet(self, planet_id, ships, speed, where, mission, resources):
         def get_hidden_fields(html):
             soup = BeautifulSoup(html, 'html.parser')
@@ -71,10 +73,12 @@ class Fleet:
             return max(matches)
         return None
 
+    @retry_if_logged_out
     def cancel_fleet(self, fleet_id):
         res = self.bot.wrapper.session.get(self.bot.get_url('movement') + '&return={}'.format(fleet_id)).content
         self.bot.is_logged(res)
 
+    @retry_if_logged_out
     def get_fleets(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content
         self.bot.is_logged(res)
@@ -155,6 +159,7 @@ class Fleet:
             fleets.append(fleet)
         return fleets
 
+    @retry_if_logged_out
     def get_fleet_ids(self):
         """Return the reversable fleet ids."""
         res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content

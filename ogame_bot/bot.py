@@ -1,13 +1,13 @@
 import logging
 import os
 
-from bot.game import Game
-from bot.planet import Planet
-from bot.user import User
+from ogame_bot.game import Game
+from ogame_bot.planet import Planet
+from ogame_bot.user import User
 from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 
-from bot import modes
-from bot.modes.mode import Mode
+from ogame_bot import modes
+from ogame_bot.modes.mode import Mode
 
 
 class Bot:
@@ -25,13 +25,14 @@ class Bot:
         self.planets = []
 
     def initialize(self):
-        self.user = User(self)
-        self.game = Game(self)
+        self.user = User()
+        self.game = Game()
         for planet_id in self.user.get_planet_ids():
-            self.planets.append(Planet(self, planet_id))
+            self.planets.append(Planet(planet_id))
 
     def is_logged(self, html=None):
         if not self.wrapper.is_logged(html=html):
+            logging.warning(f"{self.__class__.__name__}:: Disconnected...")
             raise NOT_LOGGED
         return True
 
