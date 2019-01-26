@@ -261,62 +261,98 @@ Prices = {
         'prerequisites': {Research.EspionageTechnology: 4, Research.ImpulseDrive: 3}
     },
     Ships.SolarSatellite: {
-        'cost': {Resources.Metal: [0, 0], Resources.Crystal: [0, 0], Resources.Deuterium: [0, 0]},
+        'cost': {Resources.Metal: [0, 1], Resources.Crystal: [2000, 1], Resources.Deuterium: [500, 1]},
         'production': [30],
         'prerequisites': {Facilities.Shipyard: 2}
     },
     Ships.Bomber: {
-        'cost': {Resources.Metal: [50000, 0], Resources.Crystal: [25000, 0], Resources.Deuterium: [15000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [50000, 1], Resources.Crystal: [25000, 1], Resources.Deuterium: [15000, 1]},
+        'prerequisites': {Facilities.Shipyard: 8, Research.ImpulseDrive: 6, Research.PlasmaTechnology: 5}
     },
     Ships.EspionageProbe: {
-        'cost': {Resources.Metal: [0, 0], Resources.Crystal: [1000, 0], Resources.Deuterium: [0, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [0, 1], Resources.Crystal: [1000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 3, Research.EspionageTechnology: 2}
     },
     Ships.Recycler: {
-        'cost': {Resources.Metal: [10000, 0], Resources.Crystal: [6000, 0], Resources.Deuterium: [2000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [10000, 1], Resources.Crystal: [6000, 1], Resources.Deuterium: [2000, 1]},
+        'prerequisites': {Facilities.Shipyard: 4, Research.CombustionDrive: 6, Research.ShieldingTechnology: 2}
     },
     Ships.ColonyShip: {
-        'cost': {Resources.Metal: [10000, 0], Resources.Crystal: [20000, 0], Resources.Deuterium: [10000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [10000, 1], Resources.Crystal: [20000, 1], Resources.Deuterium: [10000, 1]},
+        'prerequisites': {Facilities.Shipyard: 4, Research.ImpulseDrive: 3}
     },
     Ships.Battleship: {
-        'cost': {Resources.Metal: [45000, 0], Resources.Crystal: [15000, 0], Resources.Deuterium: [0, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [45000, 1], Resources.Crystal: [15000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 7, Research.HyperspaceDrive: 4}
     },
     Ships.Cruiser: {
-        'cost': {Resources.Metal: [20000, 0], Resources.Crystal: [7000, 0], Resources.Deuterium: [2000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [20000, 1], Resources.Crystal: [7000, 1], Resources.Deuterium: [2000, 1]},
+        'prerequisites': {Facilities.Shipyard: 5, Research.IonTechnology: 2, Research.ImpulseDrive: 4}
     },
     Ships.HeavyFighter: {
-        'cost': {Resources.Metal: [6000, 0], Resources.Crystal: [4000, 0], Resources.Deuterium: [0, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [6000, 1], Resources.Crystal: [4000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 3, Research.ArmourTechnology: 2, Research.ImpulseDrive: 2}
     },
     Ships.LightFighter: {
-        'cost': {Resources.Metal: [3000, 0], Resources.Crystal: [1000, 0], Resources.Deuterium: [0, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [3000, 1], Resources.Crystal: [1000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 1, Research.CombustionDrive: 1}
     },
     Ships.LargeCargo: {
-        'cost': {Resources.Metal: [6000, 0], Resources.Crystal: [6000, 0], Resources.Deuterium: [0, 0]},
+        'cost': {Resources.Metal: [6000, 1], Resources.Crystal: [6000, 1], Resources.Deuterium: [0, 1]},
         'stock': [5000],
-        'prerequisites': {}
+        'prerequisites': {Facilities.Shipyard: 4, Research.CombustionDrive: 6}
     },
     Ships.SmallCargo: {
-        'cost': {Resources.Metal: [2000, 0], Resources.Crystal: [2000, 0], Resources.Deuterium: [0, 0]},
+        'cost': {Resources.Metal: [2000, 1], Resources.Crystal: [2000, 1], Resources.Deuterium: [0, 1]},
         'stock': [25000],
-        'prerequisites': {}
+        'prerequisites': {Facilities.Shipyard: 2, Research.CombustionDrive: 2}
     },
     Ships.Destroyer: {
-        'cost': {Resources.Metal: [60000, 0], Resources.Crystal: [50000, 0], Resources.Deuterium: [15000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [60000, 1], Resources.Crystal: [50000, 1], Resources.Deuterium: [15000, 1]},
+        'prerequisites': {Facilities.Shipyard: 9, Research.HyperspaceTechnology: 5, Research.HyperspaceDrive: 6}
     },
     Ships.Deathstar: {
-        'cost': {Resources.Metal: [5000000, 0], Resources.Crystal: [4000000, 0], Resources.Deuterium: [1000000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [5000000, 1], Resources.Crystal: [4000000, 1], Resources.Deuterium: [1000000, 1]},
+        'prerequisites': {Facilities.Shipyard: 12, Research.GravitonTechnology: 1, Research.HyperspaceDrive: 7, Research.HyperspaceTechnology: 6}
     },
     Ships.Battlecruiser: {
-        'cost': {Resources.Metal: [30000, 0], Resources.Crystal: [40000, 0], Resources.Deuterium: [15000, 0]},
-        'prerequisites': {}
+        'cost': {Resources.Metal: [30000, 1], Resources.Crystal: [40000, 1], Resources.Deuterium: [15000, 1]},
+        'prerequisites': {Facilities.Shipyard: 8, Research.LaserTechnology: 12, Research.HyperspaceDrive: 5, Research.HyperspaceTechnology: 5}
+    },
+    Defenses.LightLaser: {
+        'cost': {Resources.Metal: [1500, 1], Resources.Crystal: [500, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 2, Research.LaserTechnology: 3}
+    },
+    Defenses.HeavyLaser: {
+        'cost': {Resources.Metal: [6000, 1], Resources.Crystal: [2000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 4, Research.EnergyTechnology: 3, Research.LaserTechnology: 6}
+    },
+    Defenses.GaussCannon: {
+        'cost': {Resources.Metal: [20000, 1], Resources.Crystal: [15000, 1], Resources.Deuterium: [2000, 1]},
+        'prerequisites': {Facilities.Shipyard: 6, Research.WeaponsTechnology: 3, Research.EnergyTechnology: 6, Research.ShieldingTechnology: 1}
+    },
+    Defenses.IonCannon: {
+        'cost': {Resources.Metal: [2000, 1], Resources.Crystal: [6000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 4, Research.IonTechnology: 4}
+    },
+    Defenses.PlasmaTurret: {
+        'cost': {Resources.Metal: [50000, 1], Resources.Crystal: [50000, 1], Resources.Deuterium: [30000, 1]},
+        'prerequisites': {Facilities.Shipyard: 8, Research.PlasmaTechnology: 7}
+    },
+    Defenses.SmallShieldDome: {
+        'cost': {Resources.Metal: [10000, 1], Resources.Crystal: [10000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 1, Research.ShieldingTechnology: 2}
+    },
+    Defenses.LargeShieldDome: {
+        'cost': {Resources.Metal: [50000, 1], Resources.Crystal: [50000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.Shipyard: 6, Research.ShieldingTechnology: 6}
+    },
+    Defenses.AntiBallisticMissiles: {
+        'cost': {Resources.Metal: [8000, 1], Resources.Crystal: [2000, 1], Resources.Deuterium: [0, 1]},
+        'prerequisites': {Facilities.MissileSilo: 2}
+    },
+    Defenses.InterplanetaryMissiles: {
+        'cost': {Resources.Metal: [12500, 1], Resources.Crystal: [2500, 1], Resources.Deuterium: [10000, 1]},
+        'prerequisites': {Facilities.MissileSilo: 4, Research.ImpulseDrive: 1}
     }
 }
