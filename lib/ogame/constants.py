@@ -42,6 +42,9 @@ class Facilities(IntEnum):
     NaniteFactory = 15
     Terraformer = 33
     SpaceDock = 36
+    LunarBase = 41
+    JumpGate = 43
+    SensorPhalanx = 42
 
 
 class Defenses(IntEnum):
@@ -195,6 +198,18 @@ Prices = {
     Facilities.SpaceDock: {
         'cost': {Resources.Metal: [2500, 2], Resources.Crystal: [625, 2], Resources.Deuterium: [0, 2], Resources.Energy: [156, 2]},
         'prerequisites': {Facilities.Shipyard: 2}
+    },
+    Facilities.LunarBase: {
+        'cost': {Resources.Metal: [20000, 2], Resources.Crystal: [40000, 2], Resources.Deuterium: [20000, 2]},
+        'prerequisites': {}
+    },
+    Facilities.SensorPhalanx: {
+        'cost': {Resources.Metal: [20000, 2], Resources.Crystal: [40000, 2], Resources.Deuterium: [20000, 2]},
+        'prerequisites': {Facilities.LunarBase: 1}
+    },
+    Facilities.JumpGate: {
+        'cost': {Resources.Metal: [2000000, 2], Resources.Crystal: [4000000, 2], Resources.Deuterium: [2000000, 2]},
+        'prerequisites': {Facilities.LunarBase: 1, Research.HyperspaceTechnology: 7}
     },
     Research.EspionageTechnology: {
         'cost': {Resources.Metal: [200, 2], Resources.Crystal: [1000, 2], Resources.Deuterium: [200, 2]},
