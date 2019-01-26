@@ -1,11 +1,12 @@
 import logging
+import random
 import re
 
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from lib.ogame import parse_int
-from lib.ogame.constants import Me
+from ogame_bot.ogame import parse_int
+from ogame_bot.ogame.constants import Me
 
 
 class User:
@@ -65,14 +66,8 @@ class User:
                 return planet_id
         return None
 
-    def send_message(self, player_id, msg):
-        headers = {'X-Requested-With': 'XMLHttpRequest'}
-        payload = {'playerId': player_id,
-                   'text': msg,
-                   'mode': 1,
-                   'ajax': 1}
-        url = self.bot.get_url('ajaxChat')
-        self.bot.wrapper.session.post(url, data=payload, headers=headers)
+    def get_random_player_planet(self):
+        return self.bot.planets[random.randint(0, len(self.bot.planets) - 1)]
 
     def is_under_attack(self, json_obj=None):
         if not json_obj:
@@ -82,7 +77,7 @@ class User:
     def get_attacks(self):
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         res = self.bot.wrapper.session.get(self.bot.get_url('eventList'), params={'ajax': 1},
-                                   headers=headers).content
+                                           headers=headers).content
         soup = BeautifulSoup(res, 'html.parser')
         if soup.find('head'):
             logging.warning(f"{self.__class__.__name__}:: Disconnected...")

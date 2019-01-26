@@ -2,7 +2,7 @@ import logging
 import random
 import time
 
-from lib.ogame.constants import Buildings, Facilities, Research
+from ogame_bot.ogame.constants import Buildings, Facilities, Research
 
 from ogame_bot.modes.mode import Mode
 

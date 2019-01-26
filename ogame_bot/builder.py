@@ -3,8 +3,9 @@ import math
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from lib.ogame import BAD_RESEARCH_ID, constants, BAD_DEFENSE_ID, BAD_SHIP_ID, BAD_BUILDING_ID
-from lib.ogame.constants import Resources, Prices, Ships, Defenses
+from ogame_bot.ogame import BAD_RESEARCH_ID, BAD_DEFENSE_ID, BAD_SHIP_ID, BAD_BUILDING_ID
+from ogame_bot.ogame import constants
+from ogame_bot.ogame.constants import Resources, Prices, Ships, Defenses
 
 
 class Builder:

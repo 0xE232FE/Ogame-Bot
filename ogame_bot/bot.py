@@ -2,9 +2,10 @@ import logging
 import os
 
 from ogame_bot.game import Game
+from ogame_bot.message import Message
 from ogame_bot.planet import Planet
 from ogame_bot.user import User
-from lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
+from ogame_bot.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 
 from ogame_bot import modes
 from ogame_bot.modes.mode import Mode
@@ -21,11 +22,13 @@ class Bot:
         self.modes = []
 
         self.user = None
+        self.message = None
         self.game = None
         self.planets = []
 
     def initialize(self):
         self.user = User()
+        self.message = Message()
         self.game = Game()
         for planet_id in self.user.get_planet_ids():
             self.planets.append(Planet(planet_id))

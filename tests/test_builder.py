@@ -1,4 +1,4 @@
-from lib.ogame.constants import Buildings, Research, Resources, Ships
+from ogame_bot.ogame.constants import Buildings, Research, Resources, Ships
 from ogame_bot.builder import Builder
 
 

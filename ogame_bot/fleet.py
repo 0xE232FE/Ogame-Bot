@@ -3,7 +3,8 @@ import re
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from lib.ogame import parse_int, constants, get_code
+from ogame_bot.ogame import parse_int, get_code
+from ogame_bot.ogame import constants
 
 
 class Fleet:

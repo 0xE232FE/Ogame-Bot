@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from lib.ogame import parse_int, get_planet_infos_regex
+from ogame_bot.ogame import parse_int, get_planet_infos_regex
 
 
 class Galaxy:

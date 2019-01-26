@@ -1,6 +1,6 @@
 import random
 
-from lib.ogame import CANT_PROCESS, NOT_LOGGED
+from ogame_bot.ogame import CANT_PROCESS, NOT_LOGGED
 
 bot_instance = None
 
