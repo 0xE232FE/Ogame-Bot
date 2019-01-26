@@ -107,7 +107,10 @@ class Builder:
             Resources.Crystal: int(math.floor(Prices[building]['cost'][Resources.Crystal][0] *
                                               Prices[building]['cost'][Resources.Crystal][1] ** (lvl - 1))),
             Resources.Deuterium: int(math.floor(Prices[building]['cost'][Resources.Deuterium][0] *
-                                                Prices[building]['cost'][Resources.Deuterium][1] ** (lvl - 1)))
+                                                Prices[building]['cost'][Resources.Deuterium][1] ** (lvl - 1))),
+            Resources.Energy: int(math.floor(Prices[building]['cost'][Resources.Energy][0] *
+                                             Prices[building]['cost'][Resources.Energy][1] ** (lvl - 1))) \
+                if Resources.Energy in Prices[building]['cost'] else -math.inf
         }
 
     @staticmethod
@@ -115,7 +118,12 @@ class Builder:
         build_requirements = Builder.building_cost(building, lvl)
         return planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] * nbr and \
                planet_resources[Resources.Crystal] >= build_requirements[Resources.Crystal] * nbr and \
-               planet_resources[Resources.Deuterium] >= build_requirements[Resources.Deuterium] * nbr
+               planet_resources[Resources.Deuterium] >= build_requirements[Resources.Deuterium] * nbr and \
+               (
+                       (Resources.Energy in build_requirements and
+                        planet_resources[Resources.Energy] >= build_requirements[Resources.Energy])
+                       or Resources.Energy not in build_requirements
+               )
 
     @staticmethod
     def building_prerequisites(building, planet_buildings):
