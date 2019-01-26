@@ -111,37 +111,37 @@ class Builder:
         }
 
     @staticmethod
+    def check_cost(building, lvl, planet_resources, nbr=1):
+        build_requirements = Builder.building_cost(building, lvl)
+        return planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] * nbr and \
+               planet_resources[Resources.Crystal] >= build_requirements[Resources.Crystal] * nbr and \
+               planet_resources[Resources.Deuterium] >= build_requirements[Resources.Deuterium] * nbr
+
+    @staticmethod
     def building_prerequisites(building, planet_buildings):
         if 'prerequisites' in Prices[building]:
             status = True
             for prerequisite in Prices[building]['prerequisites']:
-                if prerequisite['building'] not in planet_buildings or \
-                        planet_buildings[building] < prerequisite['level']:
-                    status = False
+                status = status and (prerequisite in planet_buildings and
+                                     planet_buildings[prerequisite] >= Prices[building]['prerequisites'][prerequisite])
             return status
         else:
             return True
 
-    def can_build(self, building, nbr=1, planet_resources=None, planet_buildings=None, build_if_can=True) -> bool:
-        lvl = 0
-
+    def can_build(self, building, nbr=1, lvl=1, planet_resources=None, planet_buildings=None, build_if_can=True):
         if not planet_buildings:
             planet_buildings = self.planet.get_planet_buildings()
+
+        if not planet_resources:
+            planet_resources = self.planet.get_resources()
 
         if building not in Ships and building not in Defenses:
             try:
                 lvl = planet_buildings[building] + 1
             except KeyError:
-                lvl = 1
+                pass
 
-        build_requirements = self.building_cost(building, lvl)
-
-        if not planet_resources:
-            planet_resources = self.planet.get_resources()
-
-        if planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
-                planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
-                planet_resources[Resources.Metal] >= build_requirements[Resources.Metal] and \
+        if self.check_cost(building, lvl, planet_resources, nbr=nbr) and \
                 self.building_prerequisites(building, planet_buildings):
             if build_if_can:
                 if building in Ships or building in Defenses:
