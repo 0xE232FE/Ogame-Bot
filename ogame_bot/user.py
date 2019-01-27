@@ -5,8 +5,8 @@ import re
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from ogame_bot.ogame import parse_int
-from ogame_bot.ogame.constants import Me
+from ogame_bot.lib.ogame import parse_int
+from ogame_bot.lib.ogame.constants import Me
 
 
 class User:

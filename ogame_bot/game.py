@@ -3,7 +3,7 @@ import logging
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot
-from ogame_bot.ogame import parse_int, metal_mine_production
+from ogame_bot.lib.ogame import parse_int, metal_mine_production
 
 
 class Game:

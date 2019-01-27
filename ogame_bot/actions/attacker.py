@@ -1,7 +1,7 @@
 import logging
 
 from ogame_bot.actions.action import Action
-from ogame_bot.ogame.constants import Coords, TargetTypes, Missions, Resources, Speed
+from ogame_bot.lib.ogame.constants import Coords, TargetTypes, Missions, Resources, Speed
 from ogame_bot.util import convert_constant_name
 
 

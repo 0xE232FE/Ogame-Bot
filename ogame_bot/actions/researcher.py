@@ -1,5 +1,5 @@
 from ogame_bot.actions.action import Action
-from ogame_bot.ogame.constants import Research
+from ogame_bot.lib.ogame.constants import Research
 
 
 class Researcher(Action):

@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
-from ogame_bot.ogame import get_nbr
-from ogame_bot.ogame.constants import Ships
+from ogame_bot.lib.ogame import get_nbr
+from ogame_bot.lib.ogame.constants import Ships
 
 
 class PlanetShips:

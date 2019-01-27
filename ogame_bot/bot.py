@@ -7,7 +7,7 @@ from ogame_bot.game import Game
 from ogame_bot.message import Message
 from ogame_bot.planet import Planet
 from ogame_bot.user import User
-from ogame_bot.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
+from ogame_bot.lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 
 from ogame_bot import modes
 from ogame_bot.modes.mode import Mode

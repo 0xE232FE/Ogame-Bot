@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 from ogame_bot import get_bot, retry_if_logged_out
 from ogame_bot.builder import Builder
-from ogame_bot.ogame import get_nbr
-from ogame_bot.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
+from ogame_bot.lib.ogame import get_nbr
+from ogame_bot.lib.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
 from ogame_bot.planet_ships import PlanetShips
 
 
