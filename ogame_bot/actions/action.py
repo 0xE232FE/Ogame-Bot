@@ -16,10 +16,10 @@ class Action(threading.Thread):
         super().__init__()
         self.bot = bot
         self.mode = mode
-        self.evaluation = 0
+        self.should_stop = False
 
     def run(self):
-        while True:
+        while not self.should_stop:
             for planet in self.bot.planets:
                 logging.info(f"{self.__class__.__name__}:: on planet {planet.planet_id}...")
                 self.perform_action(planet)
