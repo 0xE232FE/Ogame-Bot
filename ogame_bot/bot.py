@@ -1,11 +1,11 @@
 import logging
 import os
 
-from ogame_bot.fleet import Fleet
-from ogame_bot.galaxy import Galaxy
-from ogame_bot.game import Game
-from ogame_bot.message import Message
-from ogame_bot.planet import Planet
+from ogame_bot.core.fleet import Fleet
+from ogame_bot.core.galaxy import Galaxy
+from ogame_bot.core.game import Game
+from ogame_bot.core.message import Message
+from ogame_bot.core.planet import Planet
 from ogame_bot.user import User
 from ogame_bot.lib.ogame import OGame, BAD_CREDENTIALS, BAD_UNIVERSE_NAME, NOT_LOGGED
 

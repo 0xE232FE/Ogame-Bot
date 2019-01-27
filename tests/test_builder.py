@@ -1,5 +1,5 @@
 from ogame_bot.lib.ogame.constants import Buildings, Research, Resources, Ships
-from ogame_bot.builder import Builder
+from ogame_bot.core.builder import Builder
 
 
 def test_building_prerequisites():
