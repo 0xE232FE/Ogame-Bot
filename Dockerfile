@@ -4,7 +4,5 @@ FROM python:3.7.2-alpine3.8
 COPY . /bot/ogame
 WORKDIR /bot/ogame
 
-# installation
-RUN pip3 install -r requirements.txt
 
-ENTRYPOINT ["python", "./start.py"]
+ENTRYPOINT [""]
