@@ -1,5 +1,5 @@
 import threading
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 
 class Mode(threading.Thread):
@@ -13,5 +13,6 @@ class Mode(threading.Thread):
 
         self.start()
 
+    @abstractmethod
     def run(self):
         raise NotImplementedError("run not implemented")

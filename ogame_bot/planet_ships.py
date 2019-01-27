@@ -30,8 +30,9 @@ class PlanetShips:
                 Ships.EspionageProbe: get_nbr(soup, 'civil210'),
                 Ships.SolarSatellite: get_nbr(soup, 'civil212')}
 
-    def get_military_ships(self, without_cargo=True):
-        ships = self.get_ships()
+    def get_military_ships(self, without_cargo=True, ships=None):
+        if not ships:
+            ships = self.get_ships()
         ships.pop(Ships.ColonyShip)
         ships.pop(Ships.SolarSatellite)
         ships.pop(Ships.EspionageProbe)
@@ -40,6 +41,22 @@ class PlanetShips:
             ships.pop(Ships.SmallCargo)
             ships.pop(Ships.LargeCargo)
         return ships
+
+    def get_civilian_ships(self, with_probe=False, ships=None):
+        if not ships:
+            ships = self.get_ships()
+
+        civilian_ships = {
+            Ships.ColonyShip: ships[Ships.ColonyShip],
+            Ships.Recycler: ships[Ships.Recycler],
+            Ships.SmallCargo: ships[Ships.SmallCargo],
+            Ships.LargeCargo: ships[Ships.LargeCargo]
+        }
+
+        if with_probe:
+            civilian_ships[Ships.EspionageProbe] = ships[Ships.EspionageProbe]
+
+        return civilian_ships
 
     @staticmethod
     def has_ships(ships):
