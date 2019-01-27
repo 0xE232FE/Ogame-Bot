@@ -8,6 +8,7 @@ from ogame_bot import get_bot, retry_if_logged_out
 from ogame_bot.builder import Builder
 from ogame_bot.ogame import get_nbr
 from ogame_bot.ogame.constants import Buildings, Ships, Resources, Defenses, Facilities, Research
+from ogame_bot.planet_ships import PlanetShips
 
 
 class Planet:
@@ -15,6 +16,7 @@ class Planet:
         self.bot = get_bot()
         self.planet_id = planet_id
         self.builder = Builder(self)
+        self.planet_ships = PlanetShips(self)
 
     @retry_if_logged_out
     def fetch_resources(self):
@@ -84,26 +86,6 @@ class Planet:
                 Defenses.InterplanetaryMissiles: get_nbr(soup, 'defense503')}
 
     @retry_if_logged_out
-    def get_ships(self):
-        res = self.bot.wrapper.session.get(self.bot.get_url('shipyard', {'cp': self.planet_id})).content
-        self.bot.is_logged(res)
-        soup = BeautifulSoup(res, 'html.parser')
-        return {Ships.LightFighter: get_nbr(soup, 'military204'),
-                Ships.HeavyFighter: get_nbr(soup, 'military205'),
-                Ships.Cruiser: get_nbr(soup, 'military206'),
-                Ships.Battleship: get_nbr(soup, 'military207'),
-                Ships.Battlecruiser: get_nbr(soup, 'military215'),
-                Ships.Bomber: get_nbr(soup, 'military211'),
-                Ships.Destroyer: get_nbr(soup, 'military213'),
-                Ships.Deathstar: get_nbr(soup, 'military214'),
-                Ships.SmallCargo: get_nbr(soup, 'civil202'),
-                Ships.LargeCargo: get_nbr(soup, 'civil203'),
-                Ships.ColonyShip: get_nbr(soup, 'civil208'),
-                Ships.Recycler: get_nbr(soup, 'civil209'),
-                Ships.EspionageProbe: get_nbr(soup, 'civil210'),
-                Ships.SolarSatellite: get_nbr(soup, 'civil212')}
-
-    @retry_if_logged_out
     def get_facilities(self):
         res = self.bot.wrapper.session.get(self.bot.get_url('station', {'cp': self.planet_id})).content
         self.bot.is_logged(res)
@@ -148,7 +130,7 @@ class Planet:
 
     def get_planet_ships_and_defenses(self):
         return {
-            **self.get_ships(),
+            **self.planet_ships.get_ships(),
             **self.get_defense()
         }
 

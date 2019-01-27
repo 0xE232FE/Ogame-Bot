@@ -1,6 +1,8 @@
 import logging
 import os
 
+from ogame_bot.fleet import Fleet
+from ogame_bot.galaxy import Galaxy
 from ogame_bot.game import Game
 from ogame_bot.message import Message
 from ogame_bot.planet import Planet
@@ -24,12 +26,16 @@ class Bot:
         self.user = None
         self.message = None
         self.game = None
+        self.galaxy = None
+        self.fleet = None
         self.planets = []
 
     def initialize(self):
         self.user = User()
         self.message = Message()
         self.game = Game()
+        self.galaxy = Galaxy()
+        self.fleet = Fleet()
         for planet_id in self.user.get_planet_ids():
             self.planets.append(Planet(planet_id))
 

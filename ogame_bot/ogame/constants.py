@@ -122,6 +122,19 @@ class Missions(IntEnum):
     Expedition = 15
 
 
+class TargetTypes(IntEnum):
+    Planet = 1
+    Debris = 2
+    Moon = 3
+
+
+class Coords(Enum):
+    Galaxy = "galaxy"
+    System = "system"
+    Position = "position"
+    Type = "type"
+
+
 # from https://board.en.ogame.gameforge.com/index.php/Thread/78613-All-Buildings-Researches-Fleets-and-Defences/
 Prices = {
     Buildings.MetalMine: {
@@ -196,7 +209,8 @@ Prices = {
         'prerequisites': {}
     },
     Facilities.SpaceDock: {
-        'cost': {Resources.Metal: [2500, 2], Resources.Crystal: [625, 2], Resources.Deuterium: [0, 2], Resources.Energy: [156, 2]},
+        'cost': {Resources.Metal: [2500, 2], Resources.Crystal: [625, 2], Resources.Deuterium: [0, 2],
+                 Resources.Energy: [156, 2]},
         'prerequisites': {Facilities.Shipyard: 2}
     },
     Facilities.LunarBase: {
@@ -268,7 +282,8 @@ Prices = {
         'prerequisites': {Facilities.ResearchLab: 10, Research.ComputerTechnology: 8, Research.HyperspaceTechnology: 8}
     },
     Research.GravitonTechnology: {
-        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [0, 2], Resources.Deuterium: [0, 2], Resources.Energy: [300000, 2]},
+        'cost': {Resources.Metal: [0, 2], Resources.Crystal: [0, 2], Resources.Deuterium: [0, 2],
+                 Resources.Energy: [300000, 2]},
         'prerequisites': {Facilities.ResearchLab: 12}
     },
     Research.Astrophysics: {
@@ -328,11 +343,13 @@ Prices = {
     },
     Ships.Deathstar: {
         'cost': {Resources.Metal: [5000000, 1], Resources.Crystal: [4000000, 1], Resources.Deuterium: [1000000, 1]},
-        'prerequisites': {Facilities.Shipyard: 12, Research.GravitonTechnology: 1, Research.HyperspaceDrive: 7, Research.HyperspaceTechnology: 6}
+        'prerequisites': {Facilities.Shipyard: 12, Research.GravitonTechnology: 1, Research.HyperspaceDrive: 7,
+                          Research.HyperspaceTechnology: 6}
     },
     Ships.Battlecruiser: {
         'cost': {Resources.Metal: [30000, 1], Resources.Crystal: [40000, 1], Resources.Deuterium: [15000, 1]},
-        'prerequisites': {Facilities.Shipyard: 8, Research.LaserTechnology: 12, Research.HyperspaceDrive: 5, Research.HyperspaceTechnology: 5}
+        'prerequisites': {Facilities.Shipyard: 8, Research.LaserTechnology: 12, Research.HyperspaceDrive: 5,
+                          Research.HyperspaceTechnology: 5}
     },
     Defenses.LightLaser: {
         'cost': {Resources.Metal: [1500, 1], Resources.Crystal: [500, 1], Resources.Deuterium: [0, 1]},
@@ -344,7 +361,8 @@ Prices = {
     },
     Defenses.GaussCannon: {
         'cost': {Resources.Metal: [20000, 1], Resources.Crystal: [15000, 1], Resources.Deuterium: [2000, 1]},
-        'prerequisites': {Facilities.Shipyard: 6, Research.WeaponsTechnology: 3, Research.EnergyTechnology: 6, Research.ShieldingTechnology: 1}
+        'prerequisites': {Facilities.Shipyard: 6, Research.WeaponsTechnology: 3, Research.EnergyTechnology: 6,
+                          Research.ShieldingTechnology: 1}
     },
     Defenses.IonCannon: {
         'cost': {Resources.Metal: [2000, 1], Resources.Crystal: [6000, 1], Resources.Deuterium: [0, 1]},

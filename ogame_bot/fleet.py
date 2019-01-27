@@ -29,18 +29,18 @@ class Fleet:
         self.bot.is_logged(res)
         payload = {}
         payload.update(get_hidden_fields(res))
-        for name, value in ships:
+        for name, value in ships.items():
             payload['am{}'.format(name)] = value
         res = self.bot.wrapper.session.post(self.bot.get_url('fleet2'), data=payload).content
 
         payload = {}
         payload.update(get_hidden_fields(res))
-        payload.update({'speed': speed,
+        payload.update({'speed': speed.value,
                         'galaxy': where.get('galaxy'),
                         'system': where.get('system'),
                         'position': where.get('position'),
                         'type': where.get('type', 1)})
-        if mission == constants.Missions['RecycleDebrisField']:
+        if mission == constants.Missions.RecycleDebrisField:
             # planet type: 1
             # debris type: 2
             # moon type: 3
@@ -52,7 +52,7 @@ class Fleet:
         payload.update({'crystal': resources.get('crystal'),
                         'deuterium': resources.get('deuterium'),
                         'metal': resources.get('metal'),
-                        'mission': mission})
+                        'mission': mission.value})
         res = self.bot.wrapper.session.post(self.bot.get_url('movement'), data=payload).content
 
         res = self.bot.wrapper.session.get(self.bot.get_url('movement')).content
