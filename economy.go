@@ -1,17 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"github.com/alaingilbert/ogame"
+	"log"
 	"time"
 )
 
-func economy_bot(bot *ogame.OGame) {
+func economyBot(bot *ogame.OGame) {
+	logPrefix := "[ECONOMY]"
 	for {
 		//for _, planet := range bot.GetPlanets() {
 		//	planet.Build(210, 1)
 		//}
-		fmt.Printf("build... ")
+		log.Println(logPrefix, "Building...")
 		time.Sleep(5 * time.Minute)
 	}
 }

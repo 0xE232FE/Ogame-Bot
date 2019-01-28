@@ -15,10 +15,10 @@ func main() {
 		panic(err)
 	}
 
-	go economy_bot(bot)
-	go attacker_bot(bot)
-	go defender_bot(bot)
-	go researcher_bot(bot)
+	go economyBot(bot)
+	go attackerBot(bot)
+	go defenderBot(bot)
+	go researcherBot(bot)
 
 	select{ }
 }

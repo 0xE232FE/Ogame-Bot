@@ -1,14 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"github.com/alaingilbert/ogame"
+	"log"
 	"time"
 )
 
-func researcher_bot(bot *ogame.OGame) {
+func researcherBot(bot *ogame.OGame) {
+	logPrefix := "[RESEARCHER]"
 	for {
-		fmt.Printf("research... ")
+		log.Print(logPrefix, "Search for a research to do... ")
 		time.Sleep(5 * time.Minute)
 	}
 }

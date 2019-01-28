@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"github.com/alaingilbert/ogame"
+	"log"
 	"time"
 )
 
-func defender_bot(bot *ogame.OGame) {
+func defenderBot(bot *ogame.OGame) {
+	logPrefix := "[DEFENDER]"
 	for {
 		attacked := bot.IsUnderAttack()
-		fmt.Println(attacked) // False
+		log.Print(logPrefix, attacked) // False
 		time.Sleep(10 * time.Second)
 	}
 }
