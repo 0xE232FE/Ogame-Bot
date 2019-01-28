@@ -18,4 +18,8 @@ func main() {
 	}
 	attacked := bot.IsUnderAttack()
 	fmt.Println(attacked) // False
+
+	for _, planet := range bot.GetPlanets() {
+		planet.Build(210, 1)
+	}
 }

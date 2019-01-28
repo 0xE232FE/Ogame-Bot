@@ -1,8 +1,9 @@
-FROM python:3.7.2-alpine3.8
+FROM golang:latest
 
 # Set up octobot's environment
 COPY . /bot/ogame
 WORKDIR /bot/ogame
 
+RUN go get "github.com/alaingilbert/ogame" && go build -o main .
 
-ENTRYPOINT [""]
+ENTRYPOINT ["/bot/ogame/main"]
