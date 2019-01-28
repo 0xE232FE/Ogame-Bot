@@ -26,14 +26,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:6f87c0823c978a0ae67aee0975ed0bfeb34de1204dc669ebd1aae98a6572ae33"
-  name = "github.com/apsdehal/go-logger"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "7f202acc9de10d436c038053cfd7a60f6ae7e99a"
-  version = "1.2.0"
-
-[[projects]]
   digest = "1:6f9339c912bbdda81302633ad7e99a28dfa5a639c864061f1929510a9a64aa74"
   name = "github.com/dustin/go-humanize"
   packages = ["."]
@@ -56,14 +48,6 @@
   packages = ["math"]
   pruneopts = "UT"
   revision = "f85e0a97b3a4aafc65be1b86d962a8734cd27bf9"
-
-[[projects]]
-  digest = "1:0a69a1c0db3591fcefb47f115b224592c8dfa4368b7ba9fae509d5e16cdc95c8"
-  name = "github.com/konsorten/go-windows-terminal-sequences"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242"
-  version = "v1.0.1"
 
 [[projects]]
   digest = "1:0356f3312c9bd1cbeda81505b7fd437501d8e778ab66998ef69f00d7f9b3a0d7"
@@ -90,14 +74,6 @@
   version = "v0.8.1"
 
 [[projects]]
-  digest = "1:87c2e02fb01c27060ccc5ba7c5a407cc91147726f8f40b70cceeedbc52b1f3a8"
-  name = "github.com/sirupsen/logrus"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "e1e72e9de974bd926e5c56f83753fba2df402ce5"
-  version = "v1.3.0"
-
-[[projects]]
   branch = "master"
   digest = "1:ab288e8d2fc838c076341634d41fbe0cc6db1f5e7b680529a210342408e519ed"
   name = "github.com/yuin/gopher-lua"
@@ -112,14 +88,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:fde12c4da6237363bf36b81b59aa36a43d28061167ec4acb0d41fc49464e28b9"
-  name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
-  pruneopts = "UT"
-  revision = "c7b33c32a30bae9ba07d37eb4d86f1f8b0f644fb"
-
-[[projects]]
-  branch = "master"
   digest = "1:55b3cb1a220e69225795dc54d5dd9696b887cc9aa42bbe42d64db57540109c47"
   name = "golang.org/x/net"
   packages = [
@@ -131,17 +99,6 @@
   ]
   pruneopts = "UT"
   revision = "d26f9f9a57f3fab6a695bec0d84433c2c50f8bbf"
-
-[[projects]]
-  branch = "master"
-  digest = "1:bb644db32f5bc1e327a0f748ec871edc4dc46f19b4fbbc15bfd95b1460646537"
-  name = "golang.org/x/sys"
-  packages = [
-    "unix",
-    "windows",
-  ]
-  pruneopts = "UT"
-  revision = "b90733256f2e882e81d52f9126de08df5615afd9"
 
 [[projects]]
   digest = "1:12398479544afc106c52628ec45900189ab8cbffd4f90afde4c28679d71fc3b9"
@@ -162,10 +119,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = [
-    "github.com/alaingilbert/ogame",
-    "github.com/apsdehal/go-logger",
-    "github.com/sirupsen/logrus",
-  ]
+  input-imports = ["github.com/alaingilbert/ogame"]
   solver-name = "gps-cdcl"
   solver-version = 1
