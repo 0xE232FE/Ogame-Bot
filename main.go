@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"github.com/alaingilbert/ogame"
 	"os"
 )
-
-import "github.com/alaingilbert/ogame"
 
 func main() {
 	universe := os.Getenv("UNIVERSE")
@@ -16,10 +14,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	attacked := bot.IsUnderAttack()
-	fmt.Println(attacked) // False
 
-	for _, planet := range bot.GetPlanets() {
-		planet.Build(210, 1)
-	}
+	go economy_bot(bot)
+	go attacker_bot(bot)
+	go defender_bot(bot)
+	go researcher_bot(bot)
+
+	select{ }
 }
