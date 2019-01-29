@@ -34,7 +34,7 @@ func performPriorityShipsBuilding(bot *ogame.OGame, logPrefix string, prioritySh
 		for _, shipID := range priorityShips {
 			ship := ogame.Objs.ByID(shipID)
 			//currentNbr := ships.ByID(shipID)
-			buildNbr := 1
+			buildNbr := rand.Intn(10)
 
 			price := ship.GetPrice(buildNbr)
 			if resources.CanAfford(price) && ship.IsAvailable(planet.GetType(), resourcesBuildings, facilitiesBuildings, researches, resources.Energy){
