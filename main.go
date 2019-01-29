@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/alaingilbert/ogame"
+	"math/rand"
 	"os"
+	"time"
 )
 
 func main() {
@@ -15,9 +17,12 @@ func main() {
 		panic(err)
 	}
 
-	go economyBot(bot)
-	go attackerBot(bot)
 	go defenderBot(bot)
+	time.Sleep(time.Duration(rand.Intn(2)) * time.Minute)
+	go economyBot(bot)
+	time.Sleep(time.Duration(rand.Intn(2)) * time.Minute)
+	go attackerBot(bot)
+	time.Sleep(time.Duration(rand.Intn(2)) * time.Minute)
 	go researcherBot(bot)
 
 	select{ }
