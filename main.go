@@ -19,11 +19,9 @@ func main() {
 
 	go defenderBot(bot)
 	time.Sleep(time.Duration(rand.Intn(2)) * time.Minute)
-	go economyBot(bot)
+	go developmentBot(bot)
 	time.Sleep(time.Duration(rand.Intn(3)) * time.Minute)
 	go attackerBot(bot)
-	time.Sleep(time.Duration(rand.Intn(4)) * time.Minute)
-	go researcherBot(bot)
 
 	select{ }
 }
