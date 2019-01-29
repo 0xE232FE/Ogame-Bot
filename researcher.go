@@ -44,6 +44,8 @@ func performPriorityResearches(bot *ogame.OGame, logPrefix string, priorityResea
 				err := planet.Build(researchID, 1)
 				if err != nil {
 					log.Fatal(logPrefix, err)
+				}else{
+					resources = resources.Sub(price)
 				}
 			}
 			time.Sleep(time.Duration(rand.Intn(30)) * time.Second)
