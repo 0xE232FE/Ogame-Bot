@@ -36,15 +36,14 @@ func performPriorityResearches(bot *ogame.OGame, logPrefix string, priorityResea
 			research := ogame.Objs.ByID(researchID)
 			currentLevel := researches.ByID(researchID)
 
-			log.Println(logPrefix, "try to research new level of ", research)
-
 			price := research.GetPrice(currentLevel + 1)
 			if resources.CanAfford(price) && research.IsAvailable(planet.GetType(), resourcesBuildings, facilitiesBuildings, researches, resources.Energy){
-				log.Println(logPrefix, "Building new level of ", research)
+				log.Println(logPrefix, "try to research new level of ", research)
 				err := planet.Build(researchID, 1)
 				if err != nil {
 					log.Fatal(logPrefix, err)
 				}else{
+					log.Println(logPrefix, "Building new level of ", research)
 					resources = resources.Sub(price)
 				}
 			}

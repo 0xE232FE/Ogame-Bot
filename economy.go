@@ -41,16 +41,15 @@ func performPriorityBuildings(bot *ogame.OGame, logPrefix string, priorityBuildi
 				currentLevel = facilitiesBuildings.ByID(buildingID)
 			}
 
-			log.Println(logPrefix, "try to build new level of ", building)
-
 			price := building.GetPrice(currentLevel + 1)
 			if resources.CanAfford(price) && building.IsAvailable(planet.GetType(), resourcesBuildings, facilitiesBuildings, researches, resources.Energy){
-				log.Println(logPrefix, "Building new level of ", building)
+				log.Println(logPrefix, "try to build new level of ", building)
 				err := planet.Build(buildingID, 1)
 				if err != nil {
 					log.Fatal(logPrefix, err)
 				}else{
 					resources = resources.Sub(price)
+					log.Println(logPrefix, "Building new level of ", building)
 				}
 			}
 			time.Sleep(time.Duration(rand.Intn(30)) * time.Second)

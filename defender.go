@@ -7,7 +7,7 @@ import (
 )
 
 func defenderBot(bot *ogame.OGame) {
-	logPrefix := "[DEFENDER]"
+	logPrefix := "[DEFENDER] "
 	for {
 		attacked := bot.IsUnderAttack()
 		log.Print(logPrefix, attacked) // False
